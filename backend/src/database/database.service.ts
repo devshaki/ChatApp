@@ -92,7 +92,7 @@ export class DatabaseService {
         if (!user) {
             throw new Error('User not found');
         }
-        user.chats = user.chats.filter(chats => chats !== groupId);
+        user.contacts = user.contacts.filter(contact => contact !== groupId);
         await user.save();
     }
 
@@ -103,7 +103,7 @@ export class DatabaseService {
         }
         const groupIds = user.contacts;
         const groups = await this.groupModel.find({ _id: { $in: groupIds } });
-        return groups.map(group => ({ name: group.name, description: group.description}));
+        return groups.map(group => ({ name: group.name, description: group.description, groupId: group._id.toString() }));
     }
 
     async getMembersInGroup(groupId: string): Promise<string[]> {

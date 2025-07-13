@@ -14,5 +14,5 @@ export class GroupComponent implements OnInit {
   }
 
   @Input()
-  group:GroupDto = {name:"",description:""}
+  group:GroupDto = {name:"",description:"", groupId:""};
 }

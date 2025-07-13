@@ -29,11 +29,12 @@ export class SignupPageComponent implements OnInit {
       return;
     }
     this.apiService.signup(credentials).subscribe({
-      next: (userId:any) => {
-        if (userId) {
-          this.cookiesService.set('userId', userId);
-          this.router.navigate(['/tasks']);
-        }}
+      next: (response: any) => {
+        if (response && response.clientId) {
+          this.cookiesService.set('username', credentials.username);
+          this.router.navigate(['/chat']);
+        }
+      },
     })
   }
 

@@ -30,11 +30,13 @@ export class LoginPageComponent implements OnInit {
       return;
     }
     this.apiService.login(credentials).subscribe({
-      next: (userId:any) => {
-        if (userId) {
-          this.cookiesService.set('userId', userId);
-          this.router.navigate(['/tasks']);
-        }}
+      next: (response: any) => {
+        console.log('Login response:', response);
+        if (response && response.clientId) {
+          this.cookiesService.set('username', credentials.username);
+          this.router.navigate(['/chat']);
+        }
+      },
     })
   }
 

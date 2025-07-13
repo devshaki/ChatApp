@@ -6,8 +6,8 @@ import { AuthGateway } from './auth.gateway';
 import { CookiesService } from 'src/cookies/cookies.service';
 
 @Module({
-  imports: [DatabaseModule,CookiesService],
-  providers: [AuthService, AuthGateway],
+  imports: [DatabaseModule],
+  providers: [AuthService, AuthGateway, CookiesService],
   controllers: [AuthController],
   exports: [AuthService, AuthGateway]
 })

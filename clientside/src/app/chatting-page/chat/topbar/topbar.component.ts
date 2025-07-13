@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-topbar',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./topbar.component.scss']
 })
 export class TopbarComponent implements OnInit {
-  name: string = "Chat Component";
+  @Input() name: string = "Chat Component";
 
   constructor() { }
 

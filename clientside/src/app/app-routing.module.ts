@@ -6,8 +6,13 @@ import {ChattingPageComponent} from "./chatting-page/chatting-page.component";
 
 const routes: Routes = [
   {
-  path: 'login',
-  component: LoginPageComponent,
+    path: '',
+    redirectTo: '/login',
+    pathMatch: 'full'
+  },
+  {
+    path: 'login',
+    component: LoginPageComponent,
   },
   {
     path: 'register',
@@ -17,7 +22,6 @@ const routes: Routes = [
     path: 'chat',
     component: ChattingPageComponent
   }
-
 ];
 
 @NgModule({

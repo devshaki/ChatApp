@@ -1,5 +1,5 @@
 <div class="chatting-page-container">
-  <app-sidebar class="sidebar"></app-sidebar>
-  <app-chat class="chat"></app-chat>
+  <app-sidebar class="sidebar" (groupSelected)="onGroupSelected($event)"></app-sidebar>
+  <app-chat class="chat" [selectedGroup]="selectedGroup"></app-chat>
 </div>
 

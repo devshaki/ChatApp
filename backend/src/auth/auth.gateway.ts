@@ -7,15 +7,19 @@ export class AuthGateway {
 
   constructor(private readonly cookiesService:CookiesService) {}
 
-  public clientUsernames: Map<string, Socket> = new Map();
+  public clientUsernames: Map<Socket, string> = new Map();
 
+  getClientUsername(client: Socket): string | undefined {
+    return this.clientUsernames.get(client);
+
+  }
   handleConnection(client: Socket) {
     const username = this.cookiesService.findCookieInSocket(client, 'username');
     if (!username) { 
       client.emit('error', 'Unauthorized user');
       return;
     }
-    this.clientUsernames.set(username,client);
+    this.clientUsernames.set(client, username);
     console.log(`Client connected: ${client.id}`);
   }
   handleDisconnect(client: Socket) {
