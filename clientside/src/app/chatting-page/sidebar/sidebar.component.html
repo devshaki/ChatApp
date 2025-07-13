@@ -1,0 +1,11 @@
+<div class="sidebar-content">
+  <div *ngFor="let group of groups" class="group-item">
+    <div class="group-name" (click)="selectGroup(group)">
+      <app-group [group]="group"></app-group>
+      <mat-divider></mat-divider>
+    </div>
+  </div>
+</div>
+<div class="sidebar-buttonbar">
+  <app-buttombar></app-buttombar>
+</div>
