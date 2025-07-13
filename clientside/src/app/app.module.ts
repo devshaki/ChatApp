@@ -22,6 +22,7 @@ import { MessageComponent } from './chatting-page/chat/message/message.component
 import { TopbarComponent } from './chatting-page/chat/topbar/topbar.component';
 import { ButtombarComponent } from './chatting-page/sidebar/buttombar/buttombar.component';
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import { NewGroupPageComponent } from './new-group-page/new-group-page.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import {MatButtonToggleModule} from "@angular/material/button-toggle";
     GroupComponent,
     MessageComponent,
     TopbarComponent,
-    ButtombarComponent
+    ButtombarComponent,
+    NewGroupPageComponent
   ],
   imports: [
     BrowserModule,

@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {LoginPageComponent} from "./login-page/login-page.component";
-import {SignupPageComponent} from "./signup-page/signup-page.component";
-import {ChattingPageComponent} from "./chatting-page/chatting-page.component";
+import { LoginPageComponent } from './login-page/login-page.component';
+import { SignupPageComponent } from './signup-page/signup-page.component';
+import { ChattingPageComponent } from './chatting-page/chatting-page.component';
+import { NewGroupPageComponent } from './new-group-page/new-group-page.component';
 
 const routes: Routes = [
   {
     path: '',
     redirectTo: '/login',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'login',
@@ -20,12 +21,16 @@ const routes: Routes = [
   },
   {
     path: 'chat',
-    component: ChattingPageComponent
-  }
+    component: ChattingPageComponent,
+  },
+  {
+    path: 'new-group',
+    component: NewGroupPageComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

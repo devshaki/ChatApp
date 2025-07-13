@@ -6,29 +6,39 @@ import { Request } from 'express';
 
 @Controller('chat')
 export class ChatController {
-    constructor(private readonly databaseService: DatabaseService) {}
+  constructor(private readonly databaseService: DatabaseService) {}
 
-    @Get(':groupId/messages')
-    async getChat(@Param('groupId') groupId: string): Promise<MessageDto[]> {
-        return await this.databaseService.getMessagesByGroup(groupId);
-    }
+  @Get(':groupId/messages')
+  async getChat(@Param('groupId') groupId: string): Promise<MessageDto[]> {
+    return await this.databaseService.getMessagesByGroup(groupId);
+  }
 
-    @Get(':groupId/members')
-    async getMembersInGroup(@Param('groupId') groupId: string): Promise<string[]> {
-        return await this.databaseService.getMembersInGroup(groupId);
-    }
+  @Get(':groupId/members')
+  async getMembersInGroup(
+    @Param('groupId') groupId: string,
+  ): Promise<string[]> {
+    return await this.databaseService.getMembersInGroup(groupId);
+  }
 
-    @Get('groups')
-    async getAllGroups(@Req() request: Request): Promise<GroupDto[]> {
-        const username = request.cookies?.["username"];
-        if (!username) {
-            throw new Error('Unauthorized: No username cookie found');
-        }
-        return await this.databaseService.getGroupsByUser(username);
+  @Get('groups')
+  async getAllGroups(@Req() request: Request): Promise<GroupDto[]> {
+    const username = request.cookies?.['username'];
+    if (!username) {
+      throw new Error('Unauthorized: No username cookie found');
     }
+    return await this.databaseService.getGroupsByUser(username);
+  }
 
-    @Post('group')
-    async createGroup(@Body() body: { groupDto: GroupDto, username: string }): Promise<string> {
-        return await this.databaseService.addGroup(body.groupDto, body.username);
+  @Post('group')
+  async createGroup(
+    @Req() request,
+    @Body() groupDto: GroupDto,
+  ): Promise<string> {
+    console.log('test');
+    const username = request.cookies?.['username'];
+    if (!username) {
+      throw new Error('Unauthorized: No username cookie found');
     }
+    return await this.databaseService.addGroup(groupDto, username);
+  }
 }
