@@ -8,6 +8,7 @@ import { MessageDto } from 'src/dto/message.dto';
 import { GroupDto } from 'src/dto/group.dto';
 import { Group, GroupDocument } from 'src/schemas/group.schema';
 import { Message, MessageDocument } from 'src/schemas/message.schema';
+import { group } from 'console';
 @Injectable()
 export class DatabaseService {
     constructor(
@@ -78,51 +79,65 @@ export class DatabaseService {
     }
 
     async addUserToGroup(groupId: string, username: string): Promise<void> {
-        const userInChat = new this.UserInChatModel({
-            groupId: groupId,
-            username: username
-        });
+        const user = await this.userModel.findOne({ username: username });
+        if (!user) {
+            return;
+        }
+        user.contacts.push(groupId);
+        await user.save();
+    }
+
+    async removeUserFromGroup(username: string, groupId: string) {
+        const user = await this.userModel.findOne({ username: username });
+        if (!user) {
+            throw new Error('User not found');
+        }
+        user.chats = user.chats.filter(chats => chats !== groupId);
+        await user.save();
     }
 
     async getGroupsByUser(username: string): Promise<GroupDto[]> {
-        const userInChats = await this.UserInChatModel.find({ username: username });
-        const groupIds = userInChats.map(userInChat => userInChat.groupId);
+        const user = await this.userModel.findOne({ username: username });
+        if (!user) {
+            return [];
+        }
+        const groupIds = user.contacts;
         const groups = await this.groupModel.find({ _id: { $in: groupIds } });
         return groups.map(group => ({ name: group.name, description: group.description}));
     }
 
     async getMembersInGroup(groupId: string): Promise<string[]> {
-        const usersInGroup = await this.UserInChatModel.find({ groupId: groupId });
-        const usernames = usersInGroup.map(userInChat => userInChat.username);
+        const usersInGroup = await this.userModel.find({contacts: groupId});
+        const usernames = usersInGroup.map(user => user.username);
         return usernames;
     }
 
     async addFriend(username: string, friendname: string) {
-        const isExistingFriend = await this.UserInChatModel.findOne({
-            username: username,
-            friendId: friendname
-        });
-        if (isExistingFriend) {
+        const user = await this.userModel.findOne({ username: username });
+        if (!user) {
+            throw new Error('User not found');
+        }
+        if (user.contacts.includes(friendname)) {
             throw new Error('Contact already exists');
         }
-        const userInChat = new this.UserInChatModel({
-            userId: username,
-            friendId: friendname
-        });
-        await userInChat.save();
+        user.contacts.push(friendname);
+        await user.save();
     }
 
     async removeFriend(username: string, friendname: string) {
-        await this.UserInChatModel.findOneAndDelete({
-            userId: username,
-            friendId: friendname
-        });
+        const user = await this.userModel.findOne({ username: username });
+        if (!user) {
+            throw new Error('User not found');
+        }
+        user.contacts = user.contacts.filter(contact => contact !== friendname);
+        await user.save();
     }
 
     async getFriends(username: string): Promise<string[]> {
-        const friends = await this.contactModel.find({ username });
-
-        const friendIds = friends.map(contact => contact.friendname);
-        return friendIds;
+        const user = await this.userModel.findOne({ username: username });
+        if (!user) {
+            throw new Error('User not found');
+        }
+        return user.contacts;
     } 
 }
