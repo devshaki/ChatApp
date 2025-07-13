@@ -12,10 +12,10 @@ export class User {
   @Prop({required: true})
   password: string;
 
-  @Prop()
+  @Prop({ default: [] })
   contacts: string[];
 
-  @Prop()
+  @Prop({ default: [] })
   chats: string[];
 }
 

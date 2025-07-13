@@ -1,6 +1,7 @@
 import { Controller, Get, Param, Post, Body } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { MessageDto } from 'src/dto/message.dto';
+import { GroupDto } from 'src/dto/group.dto';
 
 @Controller('chat')
 export class ChatController {
@@ -16,14 +17,13 @@ export class ChatController {
         return await this.databaseService.getMembersInGroup(groupId);
     }
 
-    @Post(':groupId/message')
-    async addMessage(@Param('groupId') groupId: string, @Body() messageDto: MessageDto): Promise<string> {
-        messageDto.chatId = groupId; 
-        return await this.databaseService.addMessage(messageDto);
+    @Get('user/:username/groups')
+    async getAllGroups(@Param('username') username: string): Promise<GroupDto[]> {
+        return await this.databaseService.getGroupsByUser(username);
     }
 
-    @Post(':groupId/member/:username')
-    async addMemberToGroup(@Param('groupId') groupId: string, @Param('username') username: string): Promise<void> {
-        await this.databaseService.addUserToGroup(groupId, username);
+    @Post('group')
+    async createGroup(@Body() groupDto: GroupDto, @Body() username: string): Promise<string> {
+        return await this.databaseService.addGroup(groupDto, username);
     }
 }
