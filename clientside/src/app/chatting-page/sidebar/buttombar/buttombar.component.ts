@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./buttombar.component.scss'],
 })
 export class ButtombarComponent implements OnInit {
+  selectedToggle: string | null = null;
+
   constructor(private readonly router: Router) {}
 
   ngOnInit(): void {}

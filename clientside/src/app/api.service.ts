@@ -98,4 +98,21 @@ export class ApiService {
       withCredentials: true,
     });
   }
+
+  public addContact(username: string): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/chat/add-contact/${username}`,
+      {},
+      {
+        headers: this.headers,
+        withCredentials: true,
+      }
+    );
+  }
+  public getUsers(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/chat/usernames`, {
+      headers: this.headers,
+      withCredentials: true,
+    });
+  }
 }

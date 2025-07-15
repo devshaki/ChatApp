@@ -145,4 +145,8 @@ export class DatabaseService {
     }
     return user.contacts;
   }
+  async getUsernames(): Promise<string[]> {
+    const users = await this.userModel.find({});
+    return users.map((user) => user.username);
+  }
 }

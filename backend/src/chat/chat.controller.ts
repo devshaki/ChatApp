@@ -77,4 +77,21 @@ export class ChatController {
     }
     return await this.databaseService.addUserToGroup(username, groupId);
   }
+
+  @Put('/add-contact/:username')
+  async addContact(
+    @Req() request: Request,
+    @Param('username') username: string,
+  ): Promise<void> {
+    const currentUsername = request.cookies?.['username'];
+    if (!currentUsername) {
+      throw new Error('Unauthorized: No username cookie found');
+    }
+    return await this.databaseService.addFriend(currentUsername, username);
+  }
+
+  @Get('usernames')
+  async getUsernames(): Promise<string[]> {
+    return await this.databaseService.getUsernames();
+  }
 }

@@ -27,6 +27,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NewGroupPageComponent } from './new-group-page/new-group-page.component';
 import { GroupEditorPageComponent } from './group-editor-page/group-editor-page.component';
 import { MemberComponent } from './group-editor-page/member/member.component';
+import { AddContactComponent } from './chatting-page/sidebar/addContact/addContact.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { MemberComponent } from './group-editor-page/member/member.component';
     NewGroupPageComponent,
     GroupEditorPageComponent,
     MemberComponent,
+    AddContactComponent,
   ],
   imports: [
     BrowserModule,
