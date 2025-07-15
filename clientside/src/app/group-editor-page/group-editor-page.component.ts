@@ -3,6 +3,7 @@ import { GroupDto } from '../dto/group.dto';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { FormControl } from '@angular/forms';
+import { SocketIoService } from '../socket-io.service';
 
 @Component({
   selector: 'app-group-editor-page',
@@ -18,6 +19,7 @@ export class GroupEditorPageComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
+    private readonly socketIoService: SocketIoService,
     private readonly apiService: ApiService
   ) {}
 
@@ -45,24 +47,16 @@ export class GroupEditorPageComponent implements OnInit {
 
   onKickMember(member: string): void {
     if (this.group?.groupId) {
-      this.apiService.removeUserToGroup(this.group.groupId, member).subscribe({
-        next: () => {
-          console.log('Kicking user:', member);
-
-          this.loadMembers();
-        },
-      });
+      this.socketIoService.kickMember(this.group.groupId, member);
+      this.loadMembers();
     }
   }
 
   onAddMember(member: string): void {
-    console.log('Adding member:', member, 'to group:', this.group?.groupId);
     if (this.group?.groupId && member.trim()) {
-      this.apiService.addUserToGroup(this.group.groupId, member).subscribe({
-        next: () => {
-          this.loadMembers();
-        },
-      });
+      console.log(member);
+      this.socketIoService.addMember(this.group.groupId, member);
+      this.loadMembers();
     }
   }
 
