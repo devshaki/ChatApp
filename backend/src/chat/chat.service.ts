@@ -37,7 +37,7 @@ export class ChatService {
   }
 
   async getMembersInGroup(groupId: string): Promise<string[]> {
-    const usersInGroup = await this.userModel.find({ contacts: groupId });
+    const usersInGroup = await this.userModel.find({ chats: groupId });
     const usernames = usersInGroup.map((user) => user.username);
     return usernames;
   }

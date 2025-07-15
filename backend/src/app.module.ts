@@ -15,7 +15,7 @@ import { CookiesService } from './cookies/cookies.service';
     AuthModule,
     DatabaseModule,
     ChatModule,
-    FriendsModule
+    FriendsModule,
   ],
   controllers: [AppController],
   providers: [AppService, HashingService, CookiesService],

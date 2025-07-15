@@ -6,7 +6,6 @@ import {
 import { MessageDto } from 'src/dto/message.dto';
 import { ChatService } from './chat.service';
 import { Server, Socket } from 'socket.io';
-import * as cookie from 'cookie';
 import { CookiesService } from 'src/cookies/cookies.service';
 import { AuthGateway } from 'src/auth/auth.gateway';
 import { DatabaseService } from 'src/database/database.service';
@@ -37,7 +36,6 @@ export class ChatGateway {
     );
     this.chatService.emitToChat(payload.chatId, 'message', payload);
     this.chatService.addMessage(payload, username);
-    this.server.emit('message', payload);
     console.log(`Message from ${username}: ${payload.body}`);
     return 'Message received';
   }

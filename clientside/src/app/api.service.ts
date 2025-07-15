@@ -61,4 +61,38 @@ export class ApiService {
       }
     );
   }
+
+  public addUserToGroup(groupId: string, username: string) {
+    return this.http.put<void>(
+      `${this.apiUrl}/chat/add/${groupId}/${username}`,
+      {
+        headers: this.headers,
+        withCredentials: true,
+      }
+    );
+  }
+
+  public removeUserToGroup(groupId: string, username: string) {
+    return this.http.put<void>(
+      `${this.apiUrl}/chat/remove/${groupId}/${username}`,
+      {
+        headers: this.headers,
+        withCredentials: true,
+      }
+    );
+  }
+
+  public getMembersInGroup(groupId: string): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/chat/${groupId}/members`, {
+      headers: this.headers,
+      withCredentials: true,
+    });
+  }
+
+  public getUserContacts(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/chat/contacts`, {
+      headers: this.headers,
+      withCredentials: true,
+    });
+  }
 }

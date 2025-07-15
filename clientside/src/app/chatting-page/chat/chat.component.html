@@ -1,7 +1,9 @@
-<app-topbar></app-topbar>
 <div class="chat-container">
   <div class="chat-header">
-    <app-topbar [name]="selectedGroup?.name || ''"></app-topbar>
+    <app-topbar
+      [group]="selectedGroup || null"
+      (onEditGroup)="onEditGroup($event)"
+    ></app-topbar>
   </div>
   <div class="chat-messages">
     <div *ngFor="let message of messages">

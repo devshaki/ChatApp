@@ -11,9 +11,17 @@ export class SocketIoService {
   public message$ = new Subject<MessageDto>();
 
   constructor() {
+    console.log('SocketIoService constructor called');
+
+    console.log('Creating new socket connection');
     this.socket = io('http://localhost:3000', {
       transports: ['websocket'],
     });
+
+    this.socket.on('connect', () => {
+      console.log('Socket connected with ID:', this.socket.id);
+    });
+
     this.socket.on('message', (message: MessageDto) => {
       console.log(
         `Received message: ${message.body} ${message.chatId} ${message.senderId}`

@@ -16,6 +16,7 @@ export class ChattingPageComponent implements OnInit {
 
   onGroupSelected(group: GroupDto): void {
     console.log('Selected group:', group);
+    
     this.selectedGroup = group;
   }
 }

@@ -10,16 +10,15 @@ import { User, UserSchema } from '../schemas/user.schema';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthGateway } from 'src/auth/auth.gateway';
 
-
 @Module({
   imports: [
     DatabaseModule,
     MongooseModule.forFeature([
-      { name: Message.name, schema: MessageSchema},
-      { name: User.name, schema: UserSchema }
-    ])
+      { name: Message.name, schema: MessageSchema },
+      { name: User.name, schema: UserSchema },
+    ]),
   ],
   controllers: [ChatController],
-  providers: [ChatService, ChatGateway, CookiesService, AuthGateway]
+  providers: [ChatService, ChatGateway, CookiesService, AuthGateway],
 })
 export class ChatModule {}

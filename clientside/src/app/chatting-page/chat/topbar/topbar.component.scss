@@ -1,5 +1,7 @@
 div {
-  margin: auto;
-  display: flex;
-  justify-content: center
+display: flex; justify-content: space-between; align-items: center
+}
+
+.centered {
+margin: 0; text-align: center
 }

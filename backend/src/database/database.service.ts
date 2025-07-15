@@ -79,12 +79,12 @@ export class DatabaseService {
     return group._id.toString();
   }
 
-  async addUserToGroup(groupId: string, username: string): Promise<void> {
+  async addUserToGroup(username: string, groupId: string): Promise<void> {
     const user = await this.userModel.findOne({ username: username });
     if (!user) {
       return;
     }
-    user.contacts.push(groupId);
+    user.chats.push(groupId);
     await user.save();
   }
 
@@ -93,7 +93,7 @@ export class DatabaseService {
     if (!user) {
       throw new Error('User not found');
     }
-    user.contacts = user.contacts.filter((contact) => contact !== groupId);
+    user.chats = user.chats.filter((chat) => chat !== groupId);
     await user.save();
   }
 
@@ -102,7 +102,7 @@ export class DatabaseService {
     if (!user) {
       return [];
     }
-    const groupIds = user.contacts;
+    const groupIds = user.chats;
     const groups = await this.groupModel.find({ _id: { $in: groupIds } });
     return groups.map((group) => ({
       name: group.name,
@@ -112,7 +112,7 @@ export class DatabaseService {
   }
 
   async getMembersInGroup(groupId: string): Promise<string[]> {
-    const usersInGroup = await this.userModel.find({ contacts: groupId });
+    const usersInGroup = await this.userModel.find({ chats: groupId });
     const usernames = usersInGroup.map((user) => user.username);
     return usernames;
   }

@@ -4,6 +4,7 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { SignupPageComponent } from './signup-page/signup-page.component';
 import { ChattingPageComponent } from './chatting-page/chatting-page.component';
 import { NewGroupPageComponent } from './new-group-page/new-group-page.component';
+import { GroupEditorPageComponent } from './group-editor-page/group-editor-page.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'new-group',
     component: NewGroupPageComponent,
+  },
+  {
+    path: 'group-editor',
+    component: GroupEditorPageComponent,
   },
 ];
 

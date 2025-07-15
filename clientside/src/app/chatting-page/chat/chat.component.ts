@@ -3,6 +3,7 @@ import { GroupDto } from '../../dto/group.dto';
 import { MessageDto } from 'src/app/dto/message.dto';
 import { ApiService } from 'src/app/api.service';
 import { SocketIoService } from 'src/app/socket-io.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-chat',
@@ -22,7 +23,8 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly apiService: ApiService,
-    private readonly socketioService: SocketIoService
+    private readonly socketioService: SocketIoService,
+    private readonly router: Router
   ) {}
 
   sendMessage() {
@@ -41,7 +43,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.messageSub = this.socketioService.message$.subscribe(
       (message: MessageDto) => {
-        console.log(`${message.chatId} vs ${this.selectedGroup?.groupId}`);
         if (
           this.selectedGroup &&
           message.chatId === this.selectedGroup.groupId
@@ -49,22 +50,19 @@ export class ChatComponent implements OnInit, OnDestroy {
           if (!this.messages) {
             this.messages = [];
           }
-          if (
-            !this.messages.some(
-              (m) =>
-                m.body === message.body &&
-                m.chatId === message.chatId &&
-                m.senderId === message.senderId &&
-                m.createdAt === message.createdAt
-            )
-          ) {
-            this.messages.push(message);
-          }
+          this.messages.push(message);
         }
       }
     );
   }
 
+  onEditGroup(group: GroupDto | null): void {
+    if (group) {
+      this.router.navigate(['/group-editor'], {
+        state: { group },
+      });
+    }
+  }
   ngOnDestroy(): void {
     if (this.messageSub) {
       this.messageSub.unsubscribe();
