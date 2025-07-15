@@ -18,6 +18,5 @@ export class MemberComponent implements OnInit {
 
   kickUser() {
     this.onKick.emit(this.username);
-    console.log('Kicking user:', this.username);
   }
 }

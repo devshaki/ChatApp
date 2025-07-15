@@ -65,6 +65,7 @@ export class ApiService {
   public addUserToGroup(groupId: string, username: string) {
     return this.http.put<void>(
       `${this.apiUrl}/chat/add/${groupId}/${username}`,
+      {},
       {
         headers: this.headers,
         withCredentials: true,
@@ -73,8 +74,10 @@ export class ApiService {
   }
 
   public removeUserToGroup(groupId: string, username: string) {
+    console.log(`Removing user ${username} from group ${groupId}`);
     return this.http.put<void>(
       `${this.apiUrl}/chat/remove/${groupId}/${username}`,
+      {},
       {
         headers: this.headers,
         withCredentials: true,

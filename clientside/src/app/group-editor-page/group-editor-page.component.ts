@@ -45,10 +45,10 @@ export class GroupEditorPageComponent implements OnInit {
 
   onKickMember(member: string): void {
     if (this.group?.groupId) {
-      console.log('Kicking user:', member);
-
       this.apiService.removeUserToGroup(this.group.groupId, member).subscribe({
         next: () => {
+          console.log('Kicking user:', member);
+
           this.loadMembers();
         },
       });

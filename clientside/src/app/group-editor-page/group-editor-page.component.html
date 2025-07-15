@@ -21,9 +21,6 @@
 <mat-divider></mat-divider>
 
 <mat-list role="list" *ngFor="let member of members">
-  <app-member
-    [username]="member"
-    (onKickMember)="onKickMember(member)"
-  ></app-member>
+  <app-member [username]="member" (onKick)="onKickMember(member)"></app-member>
   <mat-divider></mat-divider>
 </mat-list>
