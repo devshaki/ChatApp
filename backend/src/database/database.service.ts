@@ -73,9 +73,10 @@ export class DatabaseService {
     const group = new this.groupModel({
       name: groupDto.name,
       description: groupDto.description,
+      isDm: groupDto.isDm || false,
     });
     await group.save();
-    await this.addUserToGroup(group._id.toString(), username);
+    await this.addUserToGroup(username, group._id.toString());
     return group._id.toString();
   }
 
@@ -103,7 +104,10 @@ export class DatabaseService {
       return [];
     }
     const groupIds = user.chats;
-    const groups = await this.groupModel.find({ _id: { $in: groupIds } });
+    const groups = await this.groupModel.find({
+      _id: { $in: groupIds },
+      isDm: !true,
+    });
     return groups.map((group) => ({
       name: group.name,
       description: group.description,
@@ -148,5 +152,47 @@ export class DatabaseService {
   async getUsernames(): Promise<string[]> {
     const users = await this.userModel.find({});
     return users.map((user) => user.username);
+  }
+
+  async getDm(username: string, friendname: string): Promise<GroupDto | null> {
+    const user = await this.userModel.findOne({ username: username });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    const friend = await this.userModel.findOne({ username: friendname });
+    if (!friend) {
+      throw new Error('Friend not found');
+    }
+    const commonGroupIds = user.chats.filter((groupId) =>
+      friend.chats.includes(groupId),
+    );
+    if (commonGroupIds.length === 0) {
+      await this.createDm(username, friendname);
+      return this.getDm(username, friendname);
+    }
+    const group = await this.groupModel.findOne({
+      _id: { $in: commonGroupIds },
+      isDm: true,
+    });
+    if (!group) {
+      await this.createDm(username, friendname);
+      return this.getDm(username, friendname);
+    }
+    return {
+      name: group.name,
+      description: group.description,
+      groupId: group._id.toString(),
+      isDm: group.isDm,
+    };
+  }
+  async createDm(username: string, friendname: string): Promise<void> {
+    const newDm: GroupDto = {
+      name: ``,
+      description: ``,
+      isDm: true,
+    };
+    const groupId = await this.addGroup(newDm, username);
+    await this.addUserToGroup(friendname, groupId);
+    return;
   }
 }

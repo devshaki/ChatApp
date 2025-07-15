@@ -10,6 +10,9 @@ export class Group {
 
   @Prop()
   description: string;
+
+  @Prop()
+  isDm: boolean;
 }
 
 export const GroupSchema = SchemaFactory.createForClass(Group);

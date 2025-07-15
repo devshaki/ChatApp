@@ -1,11 +1,26 @@
 <div class="sidebar-content">
-  <div *ngFor="let group of groups" class="group-item">
-    <div class="group-name">
-      <app-group [group]="group" (onOpenGroup)="selectGroup(group)"></app-group>
+  <div *ngIf="currentView === 'Groups'">
+    <div *ngFor="let group of groups" class="group-item">
+      <div class="group-name">
+        <app-group
+          [group]="group"
+          (onOpenGroup)="selectGroup(group)"
+        ></app-group>
+        <mat-divider></mat-divider>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentView === 'Dms'">
+    <div *ngFor="let contact of contacts" class="contact-item">
+      <app-dm
+        [contactName]="contact"
+        (onOpenDm)="selectContact(contact)"
+      ></app-dm>
       <mat-divider></mat-divider>
     </div>
   </div>
 </div>
 <div class="sidebar-buttonbar">
-  <app-buttombar></app-buttombar>
+  <app-buttombar (toggleSelected)="onToggleSelected($event)"></app-buttombar>
 </div>

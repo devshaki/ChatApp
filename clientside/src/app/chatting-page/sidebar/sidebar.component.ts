@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 })
 export class SidebarComponent implements OnInit {
   groups: GroupDto[] = [];
+  contacts: string[] = [];
+  currentView: string = 'Groups';
 
   constructor(
     private readonly apiService: ApiService,
@@ -18,26 +20,40 @@ export class SidebarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('Sidebar component initializing...');
-    this.apiService.getGroups().subscribe({
-      next: (groups: GroupDto[]) => {
-        console.log('Groups loaded:', groups);
-        this.groups = groups;
-      },
-      error: (error) => {
-        console.error('Error loading groups:', error);
-      }
+    this.loadGroups();
+    this.loadContacts();
+  }
+
+  loadGroups() {
+    this.apiService.getGroups().subscribe((groups: GroupDto[]) => {
+      this.groups = groups;
     });
+  }
+
+  loadContacts() {
+    this.apiService.getUserContacts().subscribe((contacts: string[]) => {
+      this.contacts = contacts;
+    });
+  }
+
+  onToggleSelected(toggleValue: string) {
+    this.currentView = toggleValue;
+    if (toggleValue === 'Groups') {
+      this.loadGroups();
+    } else if (toggleValue === 'Contacts') {
+      this.loadContacts();
+    }
   }
 
   @Output()
   groupSelected: EventEmitter<GroupDto> = new EventEmitter<GroupDto>();
 
+  @Output()
+  contactSelected: EventEmitter<string> = new EventEmitter<string>();
   selectGroup(group: GroupDto) {
-    console.log('Sidebar selectGroup called with:', group);
     this.groupSelected.emit(group);
   }
-  onEditGroup(group: GroupDto): void {
-    this.router.navigate(['/group-editor'], { state: { group } });
+  selectContact(contact: string) {
+    this.contactSelected.emit(contact);
   }
 }

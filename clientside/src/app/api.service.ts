@@ -115,4 +115,11 @@ export class ApiService {
       withCredentials: true,
     });
   }
+
+  public getDm(friendname: string): Observable<GroupDto> {
+    return this.http.get<GroupDto>(`${this.apiUrl}/chat/dm/${friendname}`, {
+      headers: this.headers,
+      withCredentials: true,
+    });
+  }
 }

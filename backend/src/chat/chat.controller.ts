@@ -94,4 +94,16 @@ export class ChatController {
   async getUsernames(): Promise<string[]> {
     return await this.databaseService.getUsernames();
   }
+
+  @Get('dm/:friendname')
+  async getDmGroup(
+    @Req() request,
+    @Param('friendname') friendname: string,
+  ): Promise<GroupDto | null> {
+    const username = request.cookies?.['username'];
+    if (!username) {
+      throw new Error('Unauthorized: No username cookie found');
+    }
+    return await this.databaseService.getDm(username, friendname);
+  }
 }

@@ -24,10 +24,12 @@ import { ButtombarComponent } from './chatting-page/sidebar/buttombar/buttombar.
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatListModule } from '@angular/material/list';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NewGroupPageComponent } from './new-group-page/new-group-page.component';
 import { GroupEditorPageComponent } from './group-editor-page/group-editor-page.component';
 import { MemberComponent } from './group-editor-page/member/member.component';
 import { AddContactComponent } from './chatting-page/sidebar/addContact/addContact.component';
+import { DmComponent } from './chatting-page/sidebar/dm/dm.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,7 @@ import { AddContactComponent } from './chatting-page/sidebar/addContact/addConta
     GroupEditorPageComponent,
     MemberComponent,
     AddContactComponent,
+    DmComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,6 +65,7 @@ import { AddContactComponent } from './chatting-page/sidebar/addContact/addConta
     MatButtonToggleModule,
     MatListModule,
     MatAutocompleteModule,
+    MatCheckboxModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

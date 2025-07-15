@@ -7,6 +7,7 @@
   name="buttombar"
   aria-label="Font Style"
   [(value)]="selectedToggle"
+  (change)="onToggleChange($event.value)"
 >
   <mat-button-toggle value="Groups">Groups</mat-button-toggle>
   <mat-button-toggle value="Dms">Dms</mat-button-toggle>

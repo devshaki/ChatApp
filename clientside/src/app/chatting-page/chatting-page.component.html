@@ -2,6 +2,7 @@
   <app-sidebar
     class="sidebar"
     (groupSelected)="onGroupSelected($event)"
+    (contactSelected)="onContactSelected($event)"
   ></app-sidebar>
   <app-chat class="chat" [SelectedGroup]="selectedGroup"></app-chat>
 </div>
