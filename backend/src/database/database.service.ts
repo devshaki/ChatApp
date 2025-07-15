@@ -11,133 +11,188 @@ import { Message, MessageDocument } from 'src/schemas/message.schema';
 import { group } from 'console';
 @Injectable()
 export class DatabaseService {
-    constructor(
-        @InjectModel(User.name)
-        private userModel : Model<UserDocument>,
-        @InjectModel(Message.name)
-        private messageModel : Model<MessageDocument>,
-        @InjectModel(Group.name)
-        private groupModel: Model<GroupDocument>,
-        private readonly hashingService:HashingService
-    ){}
+  constructor(
+    @InjectModel(User.name)
+    private userModel: Model<UserDocument>,
+    @InjectModel(Message.name)
+    private messageModel: Model<MessageDocument>,
+    @InjectModel(Group.name)
+    private groupModel: Model<GroupDocument>,
+    private readonly hashingService: HashingService,
+  ) {}
 
-    // authenticate
-    async checkUserLogin(username: string, password: string): Promise<string> {
-        const user = await this.userModel.findOne({ username: username });
-        if (user && this.hashingService.verifyPassword(password, user.password)) {
-            return user._id.toString();
-        }
-        throw new Error('Invalid username or password');
+  // authenticate
+  async checkUserLogin(username: string, password: string): Promise<string> {
+    const user = await this.userModel.findOne({ username: username });
+    if (user && this.hashingService.verifyPassword(password, user.password)) {
+      return user._id.toString();
+    }
+    throw new Error('Invalid username or password');
+  }
+
+  async createUser(userDto: UserDto): Promise<string> {
+    const existingUser = await this.userModel.findOne({
+      username: userDto.username,
+    });
+    if (existingUser) {
+      throw new Error('Username already exists');
     }
 
-    async createUser(userDto:UserDto):Promise<string> {
-        const existingUser = await this.userModel.findOne({ username: userDto.username });
-        if (existingUser) {
-            throw new Error('Username already exists');
-        }
+    userDto.password = this.hashingService.hashPassword(userDto.password);
+    const user = new this.userModel({
+      username: userDto.username,
+      password: userDto.password,
+    });
+    await user.save();
+    return user._id.toString();
+  }
 
-        userDto.password = this.hashingService.hashPassword(userDto.password);
-        const user = new this.userModel({
-            username: userDto.username,
-            password: userDto.password
-        });
-        await user.save();
-        return user._id.toString();
+  // messages
+  async addMessage(messageDto: MessageDto): Promise<string> {
+    const message = new this.messageModel({
+      body: messageDto.body,
+      senderId: messageDto.senderId,
+      chatId: messageDto.chatId,
+      createdAt: messageDto.createdAt || Date.now().toString(),
+    });
+    await message.save();
+    return message._id.toString();
+  }
+
+  async getMessagesByGroup(groupId: string): Promise<MessageDto[]> {
+    const messages = await this.messageModel.find({ chatId: groupId });
+    return messages.map((message) => ({
+      body: message.body,
+      senderId: message.senderId,
+      chatId: message.chatId,
+      createdAt: message.createdAt,
+    }));
+  }
+
+  async addGroup(groupDto: GroupDto, username: string): Promise<string> {
+    const group = new this.groupModel({
+      name: groupDto.name,
+      description: groupDto.description,
+      isDm: groupDto.isDm || false,
+    });
+    await group.save();
+    await this.addUserToGroup(username, group._id.toString());
+    return group._id.toString();
+  }
+
+  async addUserToGroup(username: string, groupId: string): Promise<void> {
+    const user = await this.userModel.findOne({ username: username });
+    if (!user) {
+      return;
     }
+    user.chats.push(groupId);
+    await user.save();
+  }
 
-    // messages
-    async addMessage(messageDto: MessageDto): Promise<string> {
-        const message = new this.messageModel({
-            body: messageDto.body,
-            senderId: messageDto.senderId,
-            chatId: messageDto.chatId,
-            createdAt: messageDto.createdAt || Date.now().toString()
-        });
-        await message.save();
-        return message._id.toString();
+  async removeUserFromGroup(username: string, groupId: string) {
+    const user = await this.userModel.findOne({ username: username });
+    if (!user) {
+      throw new Error('User not found');
     }
+    user.chats = user.chats.filter((chat) => chat !== groupId);
+    await user.save();
+  }
 
-
-    async getMessagesByGroup(groupId: string): Promise<MessageDto[]> {
-        const messages = await this.messageModel.find({ chatId: groupId })
-        return messages.map(message => ({
-            body: message.body,
-            senderId: message.senderId,
-            chatId: message.chatId,
-            createdAt: message.createdAt
-        }));
+  async getGroupsByUser(username: string): Promise<GroupDto[]> {
+    const user = await this.userModel.findOne({ username: username });
+    if (!user) {
+      return [];
     }
+    const groupIds = user.chats;
+    const groups = await this.groupModel.find({
+      _id: { $in: groupIds },
+      isDm: !true,
+    });
+    return groups.map((group) => ({
+      name: group.name,
+      description: group.description,
+      groupId: group._id.toString(),
+    }));
+  }
 
-    async addGroup(groupDto: GroupDto, username: string): Promise<string> {
-        const group = new this.groupModel({
-            name: groupDto.name,
-            description: groupDto.description,
-        });
-        await group.save();
-        await this.addUserToGroup(group._id.toString(), username);
-        return group._id.toString();
+  async getMembersInGroup(groupId: string): Promise<string[]> {
+    const usersInGroup = await this.userModel.find({ chats: groupId });
+    const usernames = usersInGroup.map((user) => user.username);
+    return usernames;
+  }
+
+  async addFriend(username: string, friendname: string) {
+    const user = await this.userModel.findOne({ username: username });
+    if (!user) {
+      throw new Error('User not found');
     }
-
-    async addUserToGroup(groupId: string, username: string): Promise<void> {
-        const user = await this.userModel.findOne({ username: username });
-        if (!user) {
-            return;
-        }
-        user.contacts.push(groupId);
-        await user.save();
+    if (user.contacts.includes(friendname)) {
+      throw new Error('Contact already exists');
     }
+    user.contacts.push(friendname);
+    await user.save();
+  }
 
-    async removeUserFromGroup(username: string, groupId: string) {
-        const user = await this.userModel.findOne({ username: username });
-        if (!user) {
-            throw new Error('User not found');
-        }
-        user.chats = user.chats.filter(chats => chats !== groupId);
-        await user.save();
+  async removeFriend(username: string, friendname: string) {
+    const user = await this.userModel.findOne({ username: username });
+    if (!user) {
+      throw new Error('User not found');
     }
+    user.contacts = user.contacts.filter((contact) => contact !== friendname);
+    await user.save();
+  }
 
-    async getGroupsByUser(username: string): Promise<GroupDto[]> {
-        const user = await this.userModel.findOne({ username: username });
-        if (!user) {
-            return [];
-        }
-        const groupIds = user.contacts;
-        const groups = await this.groupModel.find({ _id: { $in: groupIds } });
-        return groups.map(group => ({ name: group.name, description: group.description}));
+  async getFriends(username: string): Promise<string[]> {
+    const user = await this.userModel.findOne({ username: username });
+    if (!user) {
+      throw new Error('User not found');
     }
+    return user.contacts;
+  }
+  async getUsernames(): Promise<string[]> {
+    const users = await this.userModel.find({});
+    return users.map((user) => user.username);
+  }
 
-    async getMembersInGroup(groupId: string): Promise<string[]> {
-        const usersInGroup = await this.userModel.find({contacts: groupId});
-        const usernames = usersInGroup.map(user => user.username);
-        return usernames;
+  async getDm(username: string, friendname: string): Promise<GroupDto | null> {
+    const user = await this.userModel.findOne({ username: username });
+    if (!user) {
+      throw new Error('User not found');
     }
-
-    async addFriend(username: string, friendname: string) {
-        const user = await this.userModel.findOne({ username: username });
-        if (!user) {
-            throw new Error('User not found');
-        }
-        if (user.contacts.includes(friendname)) {
-            throw new Error('Contact already exists');
-        }
-        user.contacts.push(friendname);
-        await user.save();
+    const friend = await this.userModel.findOne({ username: friendname });
+    if (!friend) {
+      throw new Error('Friend not found');
     }
-
-    async removeFriend(username: string, friendname: string) {
-        const user = await this.userModel.findOne({ username: username });
-        if (!user) {
-            throw new Error('User not found');
-        }
-        user.contacts = user.contacts.filter(contact => contact !== friendname);
-        await user.save();
+    const commonGroupIds = user.chats.filter((groupId) =>
+      friend.chats.includes(groupId),
+    );
+    if (commonGroupIds.length === 0) {
+      await this.createDm(username, friendname);
+      return this.getDm(username, friendname);
     }
-
-    async getFriends(username: string): Promise<string[]> {
-        const user = await this.userModel.findOne({ username: username });
-        if (!user) {
-            throw new Error('User not found');
-        }
-        return user.contacts;
-    } 
+    const group = await this.groupModel.findOne({
+      _id: { $in: commonGroupIds },
+      isDm: true,
+    });
+    if (!group) {
+      await this.createDm(username, friendname);
+      return this.getDm(username, friendname);
+    }
+    return {
+      name: group.name,
+      description: group.description,
+      groupId: group._id.toString(),
+      isDm: group.isDm,
+    };
+  }
+  async createDm(username: string, friendname: string): Promise<void> {
+    const newDm: GroupDto = {
+      name: ``,
+      description: ``,
+      isDm: true,
+    };
+    const groupId = await this.addGroup(newDm, username);
+    await this.addUserToGroup(friendname, groupId);
+    return;
+  }
 }

@@ -1,0 +1,26 @@
+<div class="chat-container">
+  <div class="chat-header">
+    <app-topbar
+      [group]="selectedGroup || null"
+      (onEditGroup)="onEditGroup($event)"
+    ></app-topbar>
+  </div>
+  <div class="chat-messages">
+    <div *ngFor="let message of messages">
+      <app-message [message]="message"></app-message>
+    </div>
+  </div>
+  <div class="chat-input chat-input-bottom">
+    <mat-form-field class="message-input" appearance="fill">
+      <mat-label>Type a message</mat-label>
+      <input
+        matInput
+        [(ngModel)]="messageInput"
+        (keyup.enter)="sendMessage()"
+      />
+      <button mat-icon-button matSuffix (click)="sendMessage()">
+        <mat-icon>send</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+</div>

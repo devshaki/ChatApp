@@ -1,0 +1,16 @@
+<app-addContact
+  *ngIf="selectedToggle === 'AddContact'"
+  class="centered"
+></app-addContact>
+
+<mat-button-toggle-group
+  name="buttombar"
+  aria-label="Font Style"
+  [(value)]="selectedToggle"
+  (change)="onToggleChange($event.value)"
+>
+  <mat-button-toggle value="Groups">Groups</mat-button-toggle>
+  <mat-button-toggle value="Dms">Dms</mat-button-toggle>
+  <mat-button-toggle value="AddContact">Add Contact</mat-button-toggle>
+  <button mat-button (click)="onNewGroupClick()">New Group</button>
+</mat-button-toggle-group>

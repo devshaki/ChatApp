@@ -1,4 +1,6 @@
 export class GroupDto {
-    name: string;
-    description: string;
+  name: string;
+  description: string;
+  groupId?: string;
+  isDm?: boolean;
 }
