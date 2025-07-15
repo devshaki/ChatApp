@@ -41,20 +41,23 @@ export class ChatGateway {
   }
 
   @SubscribeMessage('add')
-  handleJoin(client: Socket, groupId: string): string {
+  handleJoin(
+    client: Socket,
+    payload: { groupId: string; username: string },
+  ): string {
     const username = this.cockiesService.findCookieInSocket(client, 'username');
     if (!username) {
       client.emit('error', 'Unauthorized user');
       return 'Error: Unauthorized user';
     }
     const joinMessage: MessageDto = {
-      body: this.authGateway.getClientUsername(client) + ' has joined the chat',
-      chatId: groupId,
+      body: payload.username + ' has joined the chat',
+      chatId: payload.groupId,
       senderId: 'console',
     };
-    this.chatService.emitToChat(groupId, 'message', joinMessage);
-    this.chatService.addMessage(joinMessage, username);
-    this.databaseService.addUserToGroup(groupId, username);
+    this.chatService.emitToChat(payload.groupId, 'message', joinMessage);
+    this.chatService.addMessage(joinMessage, 'console');
+    this.databaseService.addUserToGroup(payload.username, payload.groupId);
     return 'User joined the chat';
   }
 
@@ -95,7 +98,7 @@ export class ChatGateway {
       senderId: 'console',
     };
     this.chatService.emitToChat(payload.groupId, 'message', kickMessage);
-    this.chatService.addMessage(kickMessage, adminUsername);
+    this.chatService.addMessage(kickMessage, 'console');
     this.databaseService.removeUserFromGroup(payload.username, payload.groupId);
     return `User ${payload.username} kicked from the chat`;
   }

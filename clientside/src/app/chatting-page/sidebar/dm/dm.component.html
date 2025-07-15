@@ -1,8 +1,12 @@
 <mat-card class="example-card" appearance="outlined">
   <div (click)="onClickDm()">
     <mat-card-header>
-      <mat-card-title>{{ contactName }}</mat-card-title>
-      <mat-card-subtitle>Direct Message</mat-card-subtitle>
+      <mat-card-title>
+        {{ contactName }}
+      </mat-card-title>
+      <mat-card-subtitle [ngClass]="{ online: isOnline, offline: !isOnline }">
+        {{ isOnline ? "Online" : "Offline" }}
+      </mat-card-subtitle>
     </mat-card-header>
   </div>
 </mat-card>

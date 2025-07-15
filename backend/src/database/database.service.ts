@@ -106,7 +106,6 @@ export class DatabaseService {
     const groupIds = user.chats;
     const groups = await this.groupModel.find({
       _id: { $in: groupIds },
-      isDm: !true,
     });
     return groups.map((group) => ({
       name: group.name,
