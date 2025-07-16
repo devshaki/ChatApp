@@ -1,14 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { AuthGateway } from './auth.gateway';
 import { DatabaseModule } from 'src/database/database.module';
-import { CookiesService } from 'src/cookies/cookies.service';
 
 @Module({
   imports: [DatabaseModule],
-  providers: [AuthService, AuthGateway, CookiesService],
+  providers: [AuthService],
   controllers: [AuthController],
-  exports: [AuthService, AuthGateway],
+  exports: [AuthService],
 })
 export class AuthModule {}

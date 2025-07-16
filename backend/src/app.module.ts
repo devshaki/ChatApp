@@ -7,17 +7,18 @@ import { DatabaseModule } from './database/database.module';
 import { HashingService } from './hashing/hashing.service';
 import { ChatModule } from './chat/chat.module';
 import { FriendsModule } from './friends/friends.module';
-import { CookiesService } from './cookies/cookies.service';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost/chatapp'),
+    SharedModule,
     AuthModule,
     DatabaseModule,
     ChatModule,
     FriendsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, HashingService, CookiesService],
+  providers: [AppService, HashingService],
 })
 export class AppModule {}

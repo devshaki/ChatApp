@@ -19,6 +19,6 @@ import { AuthGateway } from 'src/auth/auth.gateway';
     ]),
   ],
   controllers: [ChatController],
-  providers: [ChatService, ChatGateway, CookiesService, AuthGateway],
+  providers: [ChatService, ChatGateway],
 })
 export class ChatModule {}
