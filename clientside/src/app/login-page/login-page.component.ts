@@ -1,21 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import {UserDto} from "../dto/user.dto";
-import {ApiService} from "../api.service";
-import {CookieService} from 'ngx-cookie-service';
+import { UserDto } from '../dto/user.dto';
+import { ApiService } from '../api.service';
+import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.scss']
+  styleUrls: ['./login-page.component.scss'],
 })
 export class LoginPageComponent implements OnInit {
+  constructor(
+    private readonly apiService: ApiService,
+    private readonly cookiesService: CookieService,
+    private readonly router: Router
+  ) {}
 
-  constructor(private readonly apiService:ApiService, private readonly cookiesService:CookieService, private readonly router:Router) { }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
   hide = true;
   clickEvent(event: MouseEvent) {
     this.hide = !this.hide;
@@ -24,7 +25,7 @@ export class LoginPageComponent implements OnInit {
   onSubmit() {
     const credentials: UserDto = {
       username: (document.getElementById('username') as HTMLInputElement).value,
-      password: (document.getElementById('password') as HTMLInputElement).value
+      password: (document.getElementById('password') as HTMLInputElement).value,
     };
     if (!credentials.username || !credentials.password) {
       return;
@@ -34,10 +35,10 @@ export class LoginPageComponent implements OnInit {
         console.log('Login response:', response);
         if (response && response.clientId) {
           this.cookiesService.set('username', credentials.username);
+          console.log('Login successful, redirecting to chat page');
           this.router.navigate(['/chat']);
         }
       },
-    })
+    });
   }
-
 }

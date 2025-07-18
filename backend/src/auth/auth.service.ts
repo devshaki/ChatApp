@@ -10,7 +10,7 @@ export class AuthService {
     private readonly authGateway: AuthGateway,
   ) {}
 
-  async login(userDto: UserDto): Promise<string> {
+  public async login(userDto: UserDto): Promise<string> {
     const userId = await this.databaseService.checkUserLogin(
       userDto.username,
       userDto.password,
@@ -18,10 +18,14 @@ export class AuthService {
     return userId;
   }
 
-  async signup(userDto: UserDto): Promise<string> {
+  public isUserValid(username: string): boolean {
+    return this.databaseService.isUserValid(username);
+  }
+
+  public async signup(userDto: UserDto): Promise<string> {
     return this.databaseService.createUser(userDto);
   }
-  async emitToUsers(usernames: string[], event: string, data: any) {
+  public async emitToUsers(usernames: string[], event: string, data: any) {
     for (const [
       socket,
       username,

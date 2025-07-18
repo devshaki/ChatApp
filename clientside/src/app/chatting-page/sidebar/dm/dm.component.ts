@@ -15,6 +15,9 @@ export class DmComponent implements OnInit {
   @Output()
   onOpenDm: EventEmitter<string> = new EventEmitter<string>();
 
+  @Output()
+  onDeleteDm: EventEmitter<string> = new EventEmitter<string>();
+
   constructor(private onlineUsersService: OnlineUsersService) {}
 
   ngOnInit(): void {
@@ -26,5 +29,8 @@ export class DmComponent implements OnInit {
   onClickDm() {
     console.log('Opening DM with:', this.contactName);
     this.onOpenDm.emit(this.contactName);
+  }
+  deleteDm() {
+    this.onDeleteDm.emit(this.contactName);
   }
 }

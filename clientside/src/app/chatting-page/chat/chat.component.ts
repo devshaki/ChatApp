@@ -3,7 +3,9 @@ import { GroupDto } from '../../dto/group.dto';
 import { MessageDto } from 'src/app/dto/message.dto';
 import { ApiService } from 'src/app/api.service';
 import { SocketIoService } from 'src/app/socket-io.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-chat',
@@ -12,10 +14,9 @@ import { Router } from '@angular/router';
 })
 export class ChatComponent implements OnInit, OnDestroy {
   selectedGroup: GroupDto | null = null;
-  @Input() set SelectedGroup(group: GroupDto | null) {
-    this.selectedGroup = group;
-    this.updateMessages();
-  }
+  // @Input() set SelectedGroup(group: GroupDto | null) {
+  //   this.selectedGroup = group;
+  // }
 
   messages: MessageDto[] | null = null;
 
@@ -24,7 +25,9 @@ export class ChatComponent implements OnInit, OnDestroy {
   constructor(
     private readonly apiService: ApiService,
     private readonly socketioService: SocketIoService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly activetedRoute: ActivatedRoute,
+    private readonly cookieService: CookieService
   ) {}
 
   sendMessage() {
@@ -41,6 +44,16 @@ export class ChatComponent implements OnInit, OnDestroy {
   private messageSub: any;
 
   ngOnInit(): void {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event) => {
+        const navigationEvent = event as NavigationEnd;
+        console.log('URL changed to:', navigationEvent.url);
+        if (navigationEvent.url.startsWith('/chat/')) {
+          const chatId = navigationEvent.url.split('/chat/')[1];
+          this.loadChat(chatId);
+        }
+      });
     this.messageSub = this.socketioService.message$.subscribe(
       (message: MessageDto) => {
         if (
@@ -54,6 +67,30 @@ export class ChatComponent implements OnInit, OnDestroy {
         }
       }
     );
+  }
+
+  private loadChat(chatId: string) {
+    this.apiService.getGroup(chatId).subscribe({
+      next: (group: GroupDto) => {
+        this.messages = null;
+        this.selectedGroup = group;
+        if (group.isDm) {
+          this.apiService.getMembersInGroup(chatId).subscribe({
+            next: (members: string[]) => {
+              const currentUsername = this.cookieService.get('username');
+              const contactName = members.find(
+                (member) => member !== currentUsername
+              );
+              if (contactName && this.selectedGroup) {
+                this.selectedGroup.name = contactName;
+              }
+            },
+          });
+        }
+
+        this.updateMessages();
+      },
+    });
   }
 
   onEditGroup(group: GroupDto | null): void {

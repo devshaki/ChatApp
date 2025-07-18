@@ -30,6 +30,7 @@ import { GroupEditorPageComponent } from './group-editor-page/group-editor-page.
 import { MemberComponent } from './group-editor-page/member/member.component';
 import { AddContactComponent } from './chatting-page/sidebar/addContact/addContact.component';
 import { DmComponent } from './chatting-page/sidebar/dm/dm.component';
+import { OnlineUsersService } from './OnlineUsersService.service';
 
 @NgModule({
   declarations: [

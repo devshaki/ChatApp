@@ -3,18 +3,23 @@
     <mat-card-header>
       <mat-card-title>
         <mat-icon class="login-icon">lock</mat-icon>
-        register
+        Register
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form>
         <mat-form-field appearance="outline" class="login-field">
           <mat-label>Username</mat-label>
-          <input matInput id="username" autocomplete="username">
+          <input matInput id="username" autocomplete="username" />
         </mat-form-field>
         <mat-form-field appearance="outline" class="login-field">
           <mat-label>Password</mat-label>
-          <input id="password" matInput [type]="hide ? 'password' : 'text'" autocomplete="current-password" />
+          <input
+            id="password"
+            matInput
+            [type]="hide ? 'password' : 'text'"
+            autocomplete="current-password"
+          />
           <button
             mat-icon-button
             matSuffix
@@ -24,10 +29,18 @@
             tabindex="-1"
             type="button"
           >
-            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
           </button>
         </mat-form-field>
-        <button mat-raised-button color="primary" class="login-btn" (click)="onSubmit()" type="submit">register</button>
+        <button
+          mat-raised-button
+          color="primary"
+          class="login-btn"
+          (click)="onSubmit()"
+          type="submit"
+        >
+          Register
+        </button>
       </form>
     </mat-card-content>
     <div class="switch-link">

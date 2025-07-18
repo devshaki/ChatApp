@@ -16,7 +16,10 @@ export class ChatService {
     private readonly authGateway: AuthGateway,
   ) {}
 
-  async addMessage(messageDto: MessageDto, username: string): Promise<string> {
+  public async addMessage(
+    messageDto: MessageDto,
+    username: string,
+  ): Promise<string> {
     const message = new this.messageModel({
       body: messageDto.body,
       senderId: username,
@@ -27,7 +30,7 @@ export class ChatService {
     return message._id.toString();
   }
 
-  async emitToChat(
+  public async emitToChat(
     chatId: string,
     event: string,
     message: MessageDto,
@@ -36,12 +39,12 @@ export class ChatService {
     await this.emitToUsers(usersInChat, event, message);
   }
 
-  async getMembersInGroup(groupId: string): Promise<string[]> {
+  private async getMembersInGroup(groupId: string): Promise<string[]> {
     const usersInGroup = await this.userModel.find({ chats: groupId });
     const usernames = usersInGroup.map((user) => user.username);
     return usernames;
   }
-  async emitToUsers(usernames: string[], event: string, data: any) {
+  private async emitToUsers(usernames: string[], event: string, data: any) {
     for (const [
       socket,
       username,

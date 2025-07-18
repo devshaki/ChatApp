@@ -122,4 +122,29 @@ export class ApiService {
       withCredentials: true,
     });
   }
+
+  public getGroup(groupId: string): Observable<GroupDto> {
+    return this.http.get<GroupDto>(`${this.apiUrl}/chat/group/${groupId}`, {
+      headers: this.headers,
+      withCredentials: true,
+    });
+  }
+
+  public deleteDm(contact: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/chat/dm/${contact}`, {
+      headers: this.headers,
+      withCredentials: true,
+    });
+  }
+
+  public isLoggedIn(): Observable<boolean> {
+    return this.http.post<boolean>(
+      `${this.apiUrl}/auth/is-logged-in`,
+      {},
+      {
+        headers: this.headers,
+        withCredentials: true,
+      }
+    );
+  }
 }

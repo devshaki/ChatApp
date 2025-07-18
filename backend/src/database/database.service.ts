@@ -22,7 +22,10 @@ export class DatabaseService {
   ) {}
 
   // authenticate
-  async checkUserLogin(username: string, password: string): Promise<string> {
+  public async checkUserLogin(
+    username: string,
+    password: string,
+  ): Promise<string> {
     const user = await this.userModel.findOne({ username: username });
     if (user && this.hashingService.verifyPassword(password, user.password)) {
       return user._id.toString();
@@ -30,7 +33,7 @@ export class DatabaseService {
     throw new Error('Invalid username or password');
   }
 
-  async createUser(userDto: UserDto): Promise<string> {
+  public async createUser(userDto: UserDto): Promise<string> {
     const existingUser = await this.userModel.findOne({
       username: userDto.username,
     });
@@ -48,7 +51,7 @@ export class DatabaseService {
   }
 
   // messages
-  async addMessage(messageDto: MessageDto): Promise<string> {
+  public async addMessage(messageDto: MessageDto): Promise<string> {
     const message = new this.messageModel({
       body: messageDto.body,
       senderId: messageDto.senderId,
@@ -59,7 +62,7 @@ export class DatabaseService {
     return message._id.toString();
   }
 
-  async getMessagesByGroup(groupId: string): Promise<MessageDto[]> {
+  public async getMessagesByGroup(groupId: string): Promise<MessageDto[]> {
     const messages = await this.messageModel.find({ chatId: groupId });
     return messages.map((message) => ({
       body: message.body,
@@ -69,7 +72,7 @@ export class DatabaseService {
     }));
   }
 
-  async addGroup(groupDto: GroupDto, username: string): Promise<string> {
+  public async addGroup(groupDto: GroupDto, username: string): Promise<string> {
     const group = new this.groupModel({
       name: groupDto.name,
       description: groupDto.description,
@@ -80,7 +83,10 @@ export class DatabaseService {
     return group._id.toString();
   }
 
-  async addUserToGroup(username: string, groupId: string): Promise<void> {
+  public async addUserToGroup(
+    username: string,
+    groupId: string,
+  ): Promise<void> {
     const user = await this.userModel.findOne({ username: username });
     if (!user) {
       return;
@@ -89,7 +95,7 @@ export class DatabaseService {
     await user.save();
   }
 
-  async removeUserFromGroup(username: string, groupId: string) {
+  public async removeUserFromGroup(username: string, groupId: string) {
     const user = await this.userModel.findOne({ username: username });
     if (!user) {
       throw new Error('User not found');
@@ -98,7 +104,7 @@ export class DatabaseService {
     await user.save();
   }
 
-  async getGroupsByUser(username: string): Promise<GroupDto[]> {
+  public async getGroupsByUser(username: string): Promise<GroupDto[]> {
     const user = await this.userModel.findOne({ username: username });
     if (!user) {
       return [];
@@ -106,6 +112,7 @@ export class DatabaseService {
     const groupIds = user.chats;
     const groups = await this.groupModel.find({
       _id: { $in: groupIds },
+      isDm: false,
     });
     return groups.map((group) => ({
       name: group.name,
@@ -114,13 +121,13 @@ export class DatabaseService {
     }));
   }
 
-  async getMembersInGroup(groupId: string): Promise<string[]> {
+  public async getMembersInGroup(groupId: string): Promise<string[]> {
     const usersInGroup = await this.userModel.find({ chats: groupId });
     const usernames = usersInGroup.map((user) => user.username);
     return usernames;
   }
 
-  async addFriend(username: string, friendname: string) {
+  public async addFriend(username: string, friendname: string) {
     const user = await this.userModel.findOne({ username: username });
     if (!user) {
       throw new Error('User not found');
@@ -132,7 +139,15 @@ export class DatabaseService {
     await user.save();
   }
 
-  async removeFriend(username: string, friendname: string) {
+  public isUserValid(username: string): boolean {
+    const user = this.userModel.findOne({ username: username });
+    if (!user) {
+      return false;
+    }
+    return true;
+  }
+
+  public async removeFriend(username: string, friendname: string) {
     const user = await this.userModel.findOne({ username: username });
     if (!user) {
       throw new Error('User not found');
@@ -141,19 +156,22 @@ export class DatabaseService {
     await user.save();
   }
 
-  async getFriends(username: string): Promise<string[]> {
+  public async getFriends(username: string): Promise<string[]> {
     const user = await this.userModel.findOne({ username: username });
     if (!user) {
       throw new Error('User not found');
     }
     return user.contacts;
   }
-  async getUsernames(): Promise<string[]> {
+  public async getUsernames(): Promise<string[]> {
     const users = await this.userModel.find({});
     return users.map((user) => user.username);
   }
 
-  async getDm(username: string, friendname: string): Promise<GroupDto | null> {
+  public async getDm(
+    username: string,
+    friendname: string,
+  ): Promise<GroupDto | null> {
     const user = await this.userModel.findOne({ username: username });
     if (!user) {
       throw new Error('User not found');
@@ -184,7 +202,7 @@ export class DatabaseService {
       isDm: group.isDm,
     };
   }
-  async createDm(username: string, friendname: string): Promise<void> {
+  public async createDm(username: string, friendname: string): Promise<void> {
     const newDm: GroupDto = {
       name: ``,
       description: ``,
@@ -193,5 +211,26 @@ export class DatabaseService {
     const groupId = await this.addGroup(newDm, username);
     await this.addUserToGroup(friendname, groupId);
     return;
+  }
+
+  public async getGroupById(groupId: string): Promise<GroupDto> {
+    const group = await this.groupModel.findById(groupId);
+    if (!group) {
+      throw new Error('Group not found');
+    }
+    return {
+      name: group.name,
+      description: group.description,
+      groupId: group._id.toString(),
+      isDm: group.isDm,
+    };
+  }
+
+  public async deleteDm(username: string, contact: string): Promise<void> {
+    const group = await this.getDm(username, contact);
+    if (group && group.groupId) {
+      await this.groupModel.findByIdAndDelete(group.groupId);
+    }
+    await this.removeFriend(username, contact);
   }
 }

@@ -11,11 +11,16 @@ export class OnlineUsersService {
 
   constructor(private socketService: SocketIoService) {
     this.initializeListeners();
+    this.socketService.getOnlineUsers();
+    console.log('OnlineUsersService initialized');
   }
 
   private initializeListeners() {
     this.socketService.socket.on('userConnected', (username: string) => {
+      console.log(`User connected: ${username}`);
+
       const current = this.onlineUsers.value;
+
       if (!current.includes(username)) {
         this.onlineUsers.next([...current, username]);
       }

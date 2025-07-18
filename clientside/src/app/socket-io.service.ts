@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import io from 'socket.io-client';
 import { MessageDto } from './dto/message.dto';
+import { OnlineUsersService } from './OnlineUsersService.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +25,10 @@ export class SocketIoService {
       );
       this.message$.next(message);
     });
+  }
+
+  public getOnlineUsers() {
+    this.socket.emit('getOnlineUsers');
   }
 
   sendMessage(message: MessageDto): void {

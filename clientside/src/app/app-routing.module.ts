@@ -5,6 +5,7 @@ import { SignupPageComponent } from './signup-page/signup-page.component';
 import { ChattingPageComponent } from './chatting-page/chatting-page.component';
 import { NewGroupPageComponent } from './new-group-page/new-group-page.component';
 import { GroupEditorPageComponent } from './group-editor-page/group-editor-page.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -21,8 +22,24 @@ const routes: Routes = [
     component: SignupPageComponent,
   },
   {
+    path: 'chat/:id',
+    component: ChattingPageComponent,
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'chat',
     component: ChattingPageComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'dm/:id',
+    component: ChattingPageComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'dm',
+    component: ChattingPageComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'new-group',

@@ -45,6 +45,20 @@ export class SidebarComponent implements OnInit {
     }
   }
 
+  deleteDm(contact: string) {
+    console.log('Deleting DM with:', contact);
+    this.apiService.deleteDm(contact).subscribe({
+      next: () => {
+        console.log('DM deleted successfully');
+        this.loadContacts();
+        this.router.navigate(['/chat']);
+      },
+      error: (err) => {
+        console.error('Failed to delete DM:', err);
+      },
+    });
+  }
+
   @Output()
   groupSelected: EventEmitter<GroupDto> = new EventEmitter<GroupDto>();
 
