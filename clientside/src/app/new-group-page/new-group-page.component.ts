@@ -18,9 +18,9 @@ export class NewGroupPageComponent implements OnInit {
     private readonly router: Router
   ) {}
 
-  ngOnInit(): void {}
+  public ngOnInit(): void {}
 
-  onSubmit() {
+  public onSubmit() {
     const groupName = this.groupName.trim();
     const groupDesc = this.groupDesc.trim();
     if (!groupName) return;

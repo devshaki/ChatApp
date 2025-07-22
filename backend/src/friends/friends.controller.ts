@@ -9,11 +9,10 @@ import {
   Param,
 } from '@nestjs/common';
 import { Constants } from 'src/constants/constants';
-import { DatabaseService } from 'src/database/database.service';
-
+import { FriendService } from 'src/services/friend.service';
 @Controller('friends')
 export class FriendsController {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(private readonly friendService: FriendService) {}
 
   @Get()
   public async getFriends(@Req() request): Promise<string[]> {
@@ -21,7 +20,7 @@ export class FriendsController {
     if (!username) {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
-    return this.databaseService.getFriends(username);
+    return this.friendService.getFriends(username);
   }
 
   @Post('add/:friendname')
@@ -33,7 +32,7 @@ export class FriendsController {
     if (!username) {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
-    await this.databaseService.addFriend(username, friendname);
+    await this.friendService.addFriend(username, friendname);
   }
 
   @Post('remove/:friendname')
@@ -45,6 +44,6 @@ export class FriendsController {
     if (!username) {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
-    await this.databaseService.removeFriend(username, friendname);
+    await this.friendService.removeFriend(username, friendname);
   }
 }

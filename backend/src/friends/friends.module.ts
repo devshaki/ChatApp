@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { FriendsController } from './friends.controller';
-import { DatabaseModule } from 'src/database/database.module';
+import { SharedModule } from 'src/shared/shared.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [SharedModule],
   controllers: [FriendsController],
 })
 export class FriendsModule {}

@@ -14,9 +14,9 @@ export class MemberComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {}
+  public ngOnInit(): void {}
 
-  kickUser() {
+  public kickUser() {
     this.onKick.emit(this.username);
   }
 }

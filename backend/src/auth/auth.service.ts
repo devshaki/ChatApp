@@ -1,17 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from 'src/database/database.service';
 import { UserDto } from 'src/dto/user.dto';
 import { AuthGateway } from './auth.gateway';
+import { UserService } from 'src/services/user.service';
+import { OnlineUsersService } from './online-users.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly databaseService: DatabaseService,
+    private readonly userService: UserService,
     private readonly authGateway: AuthGateway,
+    private readonly onlineUsersService: OnlineUsersService,
   ) {}
 
   public async login(userDto: UserDto): Promise<string> {
-    const userId = await this.databaseService.checkUserLogin(
+    const userId = await this.userService.checkUserLogin(
       userDto.username,
       userDto.password,
     );
@@ -19,17 +21,17 @@ export class AuthService {
   }
 
   public isUserValid(username: string): boolean {
-    return this.databaseService.isUserValid(username);
+    return this.userService.isUserValid(username);
   }
 
   public async signup(userDto: UserDto): Promise<string> {
-    return this.databaseService.createUser(userDto);
+    return this.userService.createUser(userDto);
   }
   public async emitToUsers(usernames: string[], event: string, data: any) {
     for (const [
       socket,
       username,
-    ] of this.authGateway.clientUsernames.entries()) {
+    ] of this.onlineUsersService.clientUsernames.entries()) {
       if (usernames.includes(username)) {
         socket.emit(event, data);
       }

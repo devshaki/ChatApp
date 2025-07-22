@@ -13,14 +13,14 @@ export class ButtombarComponent implements OnInit {
 
   constructor(private readonly router: Router) {}
 
-  ngOnInit(): void {}
+  public ngOnInit(): void {}
 
-  onToggleChange(value: string) {
+  public onToggleChange(value: string) {
     this.selectedToggle = value;
     this.toggleSelected.emit(value);
   }
 
-  onNewGroupClick() {
+  public onNewGroupClick() {
     this.router.navigate(['/new-group']);
   }
 }

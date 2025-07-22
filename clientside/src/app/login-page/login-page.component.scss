@@ -18,7 +18,7 @@
   font-size: 2.2rem;
   color: #2196f3;
   vertical-align: middle;
-  margin-right: 0.5rem;
+  margin-right: 1rem;
 }
 
 mat-card-title {
@@ -42,6 +42,17 @@ mat-card-title {
   border-radius: 8px;
   margin-top: 0.5rem;
   box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
+}
+
+.error-message {
+  color: #f44336;
+  background-color: #ffebee;
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  border: 1px solid #ffcdd2;
 }
 
 .switch-link {

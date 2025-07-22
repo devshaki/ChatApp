@@ -6,26 +6,21 @@ import {
 import { Server, Socket } from 'socket.io';
 import { Constants } from 'src/constants/constants';
 import { CookiesService } from 'src/cookies/cookies.service';
+import { OnlineUsersService } from './online-users.service';
 
 @WebSocketGateway()
 export class AuthGateway {
-  constructor(private readonly cookiesService: CookiesService) {}
-  public clientUsernames: Map<Socket, string> = new Map();
+  constructor(
+    private readonly cookiesService: CookiesService,
+    private readonly onlineUsersService: OnlineUsersService,
+  ) {}
 
   @WebSocketServer()
   server: Server;
 
-  public getClientUsername(client: Socket): string | undefined {
-    return this.clientUsernames.get(client);
-  }
-
   @SubscribeMessage(Constants.GET_ONLINE_USERS_EVENT)
   public getOnlineUsers(client: Socket): void {
-    for (const [socket, username] of this.clientUsernames.entries()) {
-      if (socket !== client) {
-        client.emit(Constants.USER_CONNECT_EVENT, username);
-      }
-    }
+    this.onlineUsersService.emitOnlineUsers(client);
   }
 
   public handleConnection(client: Socket) {
@@ -37,17 +32,14 @@ export class AuthGateway {
       client.emit(Constants.ERROR_EVENT, Constants.UNAUTHORIZED_USER_MESSAGE);
       return;
     }
-    for (const [socket, user] of this.clientUsernames.entries()) {
-      client.emit(Constants.USER_CONNECT_EVENT, user);
-    }
+    this.onlineUsersService.emitOnlineUsers(client);
     client.broadcast.emit(Constants.USER_CONNECT_EVENT, username);
-    this.clientUsernames.set(client, username);
-    console.log(`Client connected: ${client.id}`);
+    this.onlineUsersService.clientUsernames.set(client, username);
   }
   public handleDisconnect(client: Socket) {
-    const username = this.clientUsernames.get(client);
+    const username = this.onlineUsersService.clientUsernames.get(client);
     this.server.emit(Constants.USER_DISCONNECT_EVENT, username);
-    this.clientUsernames.delete(client);
+    this.onlineUsersService.clientUsernames.delete(client);
     console.log(`Client disconnected: ${client.id}`);
   }
 }

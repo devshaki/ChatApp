@@ -9,41 +9,51 @@ import {
   UseGuards,
   Delete,
 } from '@nestjs/common';
-import { DatabaseService } from 'src/database/database.service';
 import { MessageDto } from 'src/dto/message.dto';
 import { GroupDto } from 'src/dto/group.dto';
 import { Request } from 'express';
 import { group } from 'console';
 import { Constants } from 'src/constants/constants';
+import { FriendService } from 'src/services/friend.service';
+import { UserService } from 'src/services/user.service';
+import { GroupService } from 'src/services/group.service';
+import { MessageService } from 'src/services/message.service';
+import { DmService } from 'src/services/dm.service';
 
 @Controller('chat')
 export class ChatController {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly friendService: FriendService,
+    private readonly userService: UserService,
+    private readonly groupService: GroupService,
+    private readonly messages: MessageService,
+    private readonly dmService: DmService,
+  ) {}
 
   @Get('contacts')
   public async getContacts(@Req() request: Request): Promise<string[]> {
     const username = request.cookies?.[Constants.USERNAME_COOKIE];
-    return await this.databaseService.getFriends(username);
+    return await this.friendService.getFriends(username);
   }
 
   @Get('groups')
   public async getAllGroups(@Req() request: Request): Promise<GroupDto[]> {
     const username = request.cookies?.[Constants.USERNAME_COOKIE];
-    return await this.databaseService.getGroupsByUser(username);
+    return await this.groupService.getGroupsByUser(username);
   }
 
   @Get(':groupId/messages')
   public async getChat(
     @Param('groupId') groupId: string,
   ): Promise<MessageDto[]> {
-    return await this.databaseService.getMessagesByGroup(groupId);
+    return await this.messages.getMessagesByGroup(groupId);
   }
 
   @Get(':groupId/members')
   public async getMembersInGroup(
     @Param('groupId') groupId: string,
   ): Promise<string[]> {
-    return await this.databaseService.getMembersInGroup(groupId);
+    return await this.groupService.getMembersInGroup(groupId);
   }
 
   @Post('group')
@@ -53,7 +63,7 @@ export class ChatController {
   ): Promise<string> {
     console.log('test');
     const username = request.cookies?.[Constants.USERNAME_COOKIE];
-    return await this.databaseService.addGroup(groupDto, username);
+    return await this.groupService.addGroup(groupDto, username);
   }
 
   @Put('/remove/:groupId/:username')
@@ -61,7 +71,7 @@ export class ChatController {
     @Param('groupId') groupId: string,
     @Param('username') username: string,
   ): Promise<void> {
-    return await this.databaseService.removeUserFromGroup(username, groupId);
+    return await this.groupService.removeUserFromGroup(username, groupId);
   }
 
   @Put('/add/:groupId/:username')
@@ -69,7 +79,7 @@ export class ChatController {
     @Param('groupId') groupId: string,
     @Param('username') username: string,
   ): Promise<void> {
-    return await this.databaseService.addUserToGroup(username, groupId);
+    return await this.groupService.addUserToGroup(username, groupId);
   }
 
   @Put('/add-contact/:username')
@@ -78,12 +88,12 @@ export class ChatController {
     @Param('username') username: string,
   ): Promise<void> {
     const currentUsername = request.cookies?.[Constants.USERNAME_COOKIE];
-    return await this.databaseService.addFriend(currentUsername, username);
+    return await this.friendService.addFriend(currentUsername, username);
   }
 
   @Get('usernames')
   public async getUsernames(): Promise<string[]> {
-    return await this.databaseService.getUsernames();
+    return await this.userService.getUsernames();
   }
 
   @Get('dm/:friendname')
@@ -92,12 +102,12 @@ export class ChatController {
     @Param('friendname') friendname: string,
   ): Promise<GroupDto | null> {
     const username = request.cookies?.[Constants.USERNAME_COOKIE];
-    return await this.databaseService.getDm(username, friendname);
+    return await this.dmService.getDm(username, friendname);
   }
 
   @Get('group/:groupId')
   public async getGroup(@Param('groupId') groupId: string): Promise<GroupDto> {
-    return await this.databaseService.getGroupById(groupId);
+    return await this.groupService.getGroupById(groupId);
   }
 
   @Delete('dm/:contact')
@@ -106,8 +116,6 @@ export class ChatController {
     @Param('contact') contact: string,
   ): Promise<void> {
     const username = request.cookies?.[Constants.USERNAME_COOKIE];
-    return await this.databaseService.deleteDm(username, contact);
+    return await this.dmService.deleteDm(username, contact);
   }
 }
-
-//    return this.http.delete<void>(`${this.apiUrl}/chat/dm/${contact}`, {

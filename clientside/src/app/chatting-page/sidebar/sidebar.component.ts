@@ -19,33 +19,33 @@ export class SidebarComponent implements OnInit {
     private readonly router: Router
   ) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.loadGroups();
     this.loadContacts();
   }
 
-  loadGroups() {
+  public loadGroups() {
     this.apiService.getGroups().subscribe((groups: GroupDto[]) => {
       this.groups = groups;
     });
   }
 
-  loadContacts() {
+  public loadContacts() {
     this.apiService.getUserContacts().subscribe((contacts: string[]) => {
       this.contacts = contacts;
     });
   }
 
-  onToggleSelected(toggleValue: string) {
+  public onToggleSelected(toggleValue: string) {
     this.currentView = toggleValue;
     if (toggleValue === 'Groups') {
       this.loadGroups();
-    } else if (toggleValue === 'Contacts') {
+    } else if (toggleValue === 'Dms') {
       this.loadContacts();
     }
   }
 
-  deleteDm(contact: string) {
+  public deleteDm(contact: string) {
     console.log('Deleting DM with:', contact);
     this.apiService.deleteDm(contact).subscribe({
       next: () => {
@@ -64,10 +64,10 @@ export class SidebarComponent implements OnInit {
 
   @Output()
   contactSelected: EventEmitter<string> = new EventEmitter<string>();
-  selectGroup(group: GroupDto) {
+  public selectGroup(group: GroupDto) {
     this.groupSelected.emit(group);
   }
-  selectContact(contact: string) {
+  public selectContact(contact: string) {
     this.contactSelected.emit(contact);
   }
 }

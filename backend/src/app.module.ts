@@ -3,22 +3,21 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { DatabaseModule } from './database/database.module';
-import { HashingService } from './hashing/hashing.service';
 import { ChatModule } from './chat/chat.module';
 import { FriendsModule } from './friends/friends.module';
 import { SharedModule } from './shared/shared.module';
+import { ChatDatabaseService } from './chat/chat-database.service';
+import { OnlineUsersService } from './auth/online-users.service';
 
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost/chatapp'),
     SharedModule,
     AuthModule,
-    DatabaseModule,
     ChatModule,
     FriendsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, HashingService],
+  providers: [AppService, OnlineUsersService],
 })
 export class AppModule {}

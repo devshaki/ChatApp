@@ -32,11 +32,11 @@ export class OnlineUsersService {
     });
   }
 
-  isUserOnline(username: string): boolean {
+  public isUserOnline(username: string): boolean {
     return this.onlineUsers.value.includes(username);
   }
 
-  getOnlineUsers(): string[] {
+  public getOnlineUsers(): string[] {
     return this.onlineUsers.value;
   }
 }

@@ -15,9 +15,9 @@ export class GroupComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {}
+  public ngOnInit(): void {}
 
-  onClickGroup() {
+  public onClickGroup() {
     this.onOpenGroup.emit(this.group);
   }
 }

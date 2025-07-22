@@ -14,13 +14,13 @@ export class AddContactComponent implements OnInit {
 
   constructor(private readonly apiService: ApiService) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.apiService.getUsers().subscribe((users: string[]) => {
       this.users = users;
     });
   }
 
-  onAddMember(username: string): void {
+  public onAddMember(username: string): void {
     this.apiService.addContact(username).subscribe({
       next: () => {
         this.myControl.setValue('');

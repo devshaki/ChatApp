@@ -20,17 +20,17 @@ export class DmComponent implements OnInit {
 
   constructor(private onlineUsersService: OnlineUsersService) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.onlineUsersService.onlineUsers$.subscribe((onlineUsers) => {
       this.isOnline = onlineUsers.includes(this.contactName);
     });
   }
 
-  onClickDm() {
+  public onClickDm() {
     console.log('Opening DM with:', this.contactName);
     this.onOpenDm.emit(this.contactName);
   }
-  deleteDm() {
+  public deleteDm() {
     this.onDeleteDm.emit(this.contactName);
   }
 }

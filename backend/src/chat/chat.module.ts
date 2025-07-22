@@ -1,24 +1,24 @@
 import { Module } from '@nestjs/common';
 import { ChatController } from './chat.controller';
 import { ChatService } from './chat.service';
-import { DatabaseModule } from 'src/database/database.module';
-import { ChatGateway } from './chat.gateway';
+// import { ChatGateway } from './chat.gateway';
 import { Message, MessageSchema } from '../schemas/message.schema';
 import { MongooseModule } from '@nestjs/mongoose';
-import { CookiesService } from 'src/cookies/cookies.service';
 import { User, UserSchema } from '../schemas/user.schema';
-import { AuthService } from 'src/auth/auth.service';
-import { AuthGateway } from 'src/auth/auth.gateway';
+import { SharedModule } from 'src/shared/shared.module';
+import { MessageGateway } from './message.gateway';
+import { GroupEventsGateway } from './group-events.gateway';
 
 @Module({
   imports: [
-    DatabaseModule,
     MongooseModule.forFeature([
       { name: Message.name, schema: MessageSchema },
       { name: User.name, schema: UserSchema },
     ]),
+    SharedModule,
   ],
   controllers: [ChatController],
-  providers: [ChatService, ChatGateway],
+  providers: [ChatService, MessageGateway, GroupEventsGateway],
+  exports: [ChatService],
 })
 export class ChatModule {}

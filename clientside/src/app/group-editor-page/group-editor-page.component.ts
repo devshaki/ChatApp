@@ -14,8 +14,8 @@ export class GroupEditorPageComponent implements OnInit {
   group: GroupDto | null = null;
   myControl = new FormControl();
 
-  members: string[] = ['Alice', 'Bob', 'Charlie'];
-  contacts: string[] = ['Dave', 'Eve', 'Frank'];
+  members: string[] = [];
+  contacts: string[] = [];
 
   constructor(
     private readonly router: Router,
@@ -23,7 +23,7 @@ export class GroupEditorPageComponent implements OnInit {
     private readonly apiService: ApiService
   ) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     const navigation = this.router.getCurrentNavigation();
 
     if (navigation?.extras.state?.['group']) {
@@ -45,14 +45,14 @@ export class GroupEditorPageComponent implements OnInit {
     }
   }
 
-  onKickMember(member: string): void {
+  public onKickMember(member: string): void {
     if (this.group?.groupId) {
       this.socketIoService.kickMember(this.group.groupId, member);
       this.loadMembers();
     }
   }
 
-  onAddMember(member: string): void {
+  public onAddMember(member: string): void {
     if (this.group?.groupId && member.trim()) {
       console.log(member);
       this.socketIoService.addMember(this.group.groupId, member);

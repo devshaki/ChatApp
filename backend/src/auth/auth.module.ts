@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { DatabaseModule } from 'src/database/database.module';
+import { SharedModule } from 'src/shared/shared.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [SharedModule],
   providers: [AuthService],
   controllers: [AuthController],
   exports: [AuthService],

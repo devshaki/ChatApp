@@ -14,8 +14,8 @@ export class TopbarComponent implements OnInit {
     new EventEmitter<GroupDto | null>();
   constructor() {}
 
-  editGroup() {
+  public editGroup() {
     this.onEditGroup.emit(this.group || null);
   }
-  ngOnInit(): void {}
+  public ngOnInit(): void {}
 }

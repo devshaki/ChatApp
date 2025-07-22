@@ -18,13 +18,13 @@ export class SignupPageComponent implements OnInit {
     private readonly router: Router
   ) {}
 
-  ngOnInit(): void {}
+  public ngOnInit(): void {}
 
-  clickEvent(event: MouseEvent) {
+  public clickEvent(event: MouseEvent) {
     this.hide = !this.hide;
     event.stopPropagation();
   }
-  onSubmit() {
+  public onSubmit() {
     const credentials: UserDto = {
       username: (document.getElementById('username') as HTMLInputElement).value,
       password: (document.getElementById('password') as HTMLInputElement).value,

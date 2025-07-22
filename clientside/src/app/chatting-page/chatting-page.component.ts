@@ -18,14 +18,14 @@ export class ChattingPageComponent implements OnInit {
     private readonly onlineUsersService: OnlineUsersService
   ) {}
 
-  ngOnInit(): void {}
+  public ngOnInit(): void {}
 
-  onGroupSelected(group: GroupDto): void {
+  public onGroupSelected(group: GroupDto): void {
     console.log('Selected group:', group);
     this.selectedGroup = group;
     this.router.navigate([`/chat/${group.groupId}`]);
   }
-  onContactSelected(contact: string): void {
+  public onContactSelected(contact: string): void {
     console.log('Selected contact:', contact);
     this.apiService.getDm(contact).subscribe({
       next: (group: GroupDto) => {

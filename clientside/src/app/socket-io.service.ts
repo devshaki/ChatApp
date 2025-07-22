@@ -31,16 +31,16 @@ export class SocketIoService {
     this.socket.emit('getOnlineUsers');
   }
 
-  sendMessage(message: MessageDto): void {
+  public sendMessage(message: MessageDto): void {
     console.log(`Sending message: ${message.body}${message.chatId}`);
     this.socket.emit('message', message);
   }
-  kickMember(groupId: string, member: string): void {
+  public kickMember(groupId: string, member: string): void {
     const payload = { groupId: groupId, username: member };
     console.log(`Kicking member: ${member} from group: ${groupId}`);
     this.socket.emit('kick', payload);
   }
-  addMember(groupId: string, member: string): void {
+  public addMember(groupId: string, member: string): void {
     const payload = { groupId: groupId, username: member };
     console.log(`Adding member: ${member} to group: ${groupId}`);
     this.socket.emit('add', payload);

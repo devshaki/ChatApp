@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate {
     private readonly apiService: ApiService
   ) {}
 
-  canActivate():
+  public canActivate():
     | boolean
     | UrlTree
     | Observable<boolean | UrlTree>

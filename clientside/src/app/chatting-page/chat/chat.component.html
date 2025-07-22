@@ -1,12 +1,12 @@
 <div class="chat-container">
   <div class="chat-header">
     <app-topbar
-      [group]="selectedGroup || null"
+      [group]="selectedGroup$ | async"
       (onEditGroup)="onEditGroup($event)"
     ></app-topbar>
   </div>
   <div class="chat-messages">
-    <div *ngFor="let message of messages">
+    <div *ngFor="let message of messages$ | async">
       <app-message [message]="message"></app-message>
       <mat-divider></mat-divider>
       <mat-divider></mat-divider>
