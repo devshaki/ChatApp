@@ -9,6 +9,7 @@ export class CookiesService {
     cookieName: string,
   ): string | undefined {
     const rawCookies = client.handshake.headers.cookie || '';
+    JSON.stringify(rawCookies);
     const parsedCookies = cookie.parse(rawCookies);
     return parsedCookies[cookieName];
   }

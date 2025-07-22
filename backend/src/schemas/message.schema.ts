@@ -3,17 +3,17 @@ import { HydratedDocument } from 'mongoose';
 
 export type MessageDocument = HydratedDocument<Message>;
 
-@Schema({ timestamps: true })
+@Schema()
 export class Message {
   @Prop()
   body: string;
 
   @Prop()
-   senderId: string;
+  senderId: string;
   @Prop()
   chatId: string;
 
-  @Prop({ default: Date.now,expires: 43200})
+  @Prop({ default: Date.now, expires: 10 })
   createdAt: Date;
 }
 
