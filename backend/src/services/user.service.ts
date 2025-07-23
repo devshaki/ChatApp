@@ -40,8 +40,8 @@ export class UserService {
     return user._id.toString();
   }
 
-  public isUserValid(username: string): boolean {
-    const user = this.userModel.findOne({ username: username });
+  public async isUserValid(username: string): Promise<boolean> {
+    const user = await this.userModel.findOne({ username: username });
     return !!user;
   }
 

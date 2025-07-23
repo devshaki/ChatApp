@@ -30,13 +30,14 @@ export class AuthController {
   }
 
   @Post('is-logged-in')
-  public isLoggedIn(@Req() request): boolean {
+  public async isLoggedIn(@Req() request): Promise<boolean> {
     const username = request.cookies?.[Constants.USERNAME_COOKIE];
     console.log('isLoggedIn', username);
     if (!username) {
       return false;
     }
-    const isValid = this.authService.isUserValid(username);
+    const isValid = await this.authService.isUserValid(username);
+    console.log(isValid);
     return isValid;
   }
 

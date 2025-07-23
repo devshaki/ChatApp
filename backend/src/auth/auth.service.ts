@@ -20,8 +20,8 @@ export class AuthService {
     return userId;
   }
 
-  public isUserValid(username: string): boolean {
-    return this.userService.isUserValid(username);
+  public async isUserValid(username: string): Promise<boolean> {
+    return await this.userService.isUserValid(username);
   }
 
   public async signup(userDto: UserDto): Promise<string> {
