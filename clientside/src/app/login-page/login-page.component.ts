@@ -50,7 +50,9 @@ export class LoginPageComponent implements OnInit {
       next: (response: any) => {
         console.log('Login response:', response);
         if (response && response.clientId) {
-          this.cookiesService.set('username', credentials.username);
+          this.cookiesService.set('username', credentials.username, {
+            path: '/',
+          });
           console.log('Login successful, redirecting to chat page');
           this.router.navigate(['/chat']);
         } else {

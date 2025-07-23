@@ -1,7 +1,57 @@
+// 🎀 Hello Kitty Top Bar 🎀
 div {
-display: flex; justify-content: space-between; align-items: center
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: var(--kitty-white);
+  border-bottom: 3px solid var(--kitty-pink);
+  position: relative;
+  
+  &::after {
+    content: '👑';
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    opacity: 0.6;
+  }
 }
 
 .centered {
-margin: 0; text-align: center
+  margin: 0;
+  text-align: center;
+  font-family: 'Comfortaa', cursive;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--kitty-hot-pink);
+  background: var(--kitty-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  flex: 1;
+  padding: 0 2rem;
+}
+
+button {
+  background: var(--kitty-gradient);
+  color: var(--kitty-white);
+  border: 3px solid var(--kitty-white);
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  box-shadow: var(--kitty-shadow);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%);
+    transform: scale(1.1);
+    box-shadow: var(--kitty-glow);
+    animation: kawaii-wiggle 0.5s ease-in-out;
+  }
+  
+  mat-icon {
+    font-size: 20px;
+  }
 }

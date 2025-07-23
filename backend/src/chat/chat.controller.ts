@@ -12,7 +12,6 @@ import {
 import { MessageDto } from 'src/dto/message.dto';
 import { GroupDto } from 'src/dto/group.dto';
 import { Request } from 'express';
-import { group } from 'console';
 import { Constants } from 'src/constants/constants';
 import { FriendService } from 'src/services/friend.service';
 import { UserService } from 'src/services/user.service';
@@ -92,8 +91,9 @@ export class ChatController {
   }
 
   @Get('usernames')
-  public async getUsernames(): Promise<string[]> {
-    return await this.userService.getUsernames();
+  public async getUsernames(@Req() request): Promise<string[]> {
+    const username = request.cookies?.[Constants.USERNAME_COOKIE];
+    return await this.userService.getUsernames(username);
   }
 
   @Get('dm/:friendname')

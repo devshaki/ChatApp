@@ -1,17 +1,157 @@
+// 🎀 Hello Kitty Chat Layout 🎀
 .chatting-page-container {
   display: flex;
+  flex-direction: row;
   height: 100vh;
+  width: 100vw;
+  background: var(--kitty-light-pink);
+  background-image: 
+    radial-gradient(circle at 20% 20%, rgba(255, 105, 180, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><g opacity="0.05"><circle cx="50" cy="50" r="20" fill="%23FF69B4"/><circle cx="150" cy="50" r="20" fill="%23FFB6C1"/><circle cx="50" cy="150" r="20" fill="%23FFD700"/><circle cx="150" cy="150" r="20" fill="%23FF69B4"/></g></svg>');
+  position: relative;
+  overflow: hidden;
+  
+  // 🌸 Floating decorations
+  &::before {
+    content: '🎀 💖 🌸 ✨ 🎀 💖 🌸 ✨';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 3rem;
+    opacity: 0.1;
+    animation: kawaii-float-bg 25s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+    letter-spacing: 5rem;
+  }
+}
+
+@keyframes kawaii-float-bg {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(50%); }
 }
 
 .sidebar {
-  width: 280px;
-  min-width: 180px;
-  background: #f5f5f5;
-  border-right: 1px solid #ddd;
+  width: 350px;
+  min-width: 350px;
+  max-width: 350px;
+  height: 100vh;
+  flex-shrink: 0;
+  background: var(--kitty-white);
+  border-right: 4px solid var(--kitty-pink);
+  position: relative;
+  z-index: 2;
+  box-shadow: 
+    var(--kitty-shadow),
+    inset -4px 0 0 rgba(255, 182, 193, 0.2);
+  overflow: hidden;
+  
+  // 💕 Animated sidebar border
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--kitty-gradient);
+    animation: kawaii-border-flow 4s ease-in-out infinite;
+  }
+  
+  &::after {
+    content: '🐱';
+    position: absolute;
+    top: 20px;
+    right: -20px;
+    font-size: 2rem;
+    background: var(--kitty-white);
+    border: 3px solid var(--kitty-pink);
+    border-radius: 50%;
+    padding: 10px;
+    animation: kawaii-wiggle 3s ease-in-out infinite;
+    z-index: 3;
+  }
+}
+
+@keyframes kawaii-border-flow {
+  0%, 100% { 
+    background: var(--kitty-gradient);
+    transform: scaleY(1);
+  }
+  50% { 
+    background: linear-gradient(180deg, #FF1493, #FF69B4, #FFB6C1);
+    transform: scaleY(1.1);
+  }
 }
 
 .chat {
   flex: 1;
-  background: #fff;
+  height: 100vh;
+  background: var(--kitty-cream);
+  background-image: 
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><defs><pattern id="kitty" patternUnits="userSpaceOnUse" width="80" height="80"><circle cx="40" cy="35" r="25" fill="none" stroke="%23FFB6C1" stroke-width="1" opacity="0.1"/><circle cx="30" cy="28" r="3" fill="%23FF69B4" opacity="0.1"/><circle cx="50" cy="28" r="3" fill="%23FF69B4" opacity="0.1"/><circle cx="35" cy="38" r="1" fill="%23000" opacity="0.1"/><circle cx="45" cy="38" r="1" fill="%23000" opacity="0.1"/><path d="M 35 42 Q 40 45 45 42" stroke="%23FF1493" stroke-width="1" fill="none" opacity="0.1"/></pattern></defs><rect width="400" height="400" fill="url(%23kitty)"/></svg>');
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  
+  // 🎀 Chat area decorative overlay
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="90" r="60" fill="%23FFB6C1" opacity="0.05"/><circle cx="75" cy="75" r="12" fill="%23FF69B4" opacity="0.05"/><circle cx="125" cy="75" r="12" fill="%23FF69B4" opacity="0.05"/><circle cx="85" cy="95" r="3" fill="%23000" opacity="0.05"/><circle cx="115" cy="95" r="3" fill="%23000" opacity="0.05"/><ellipse cx="100" cy="105" rx="5" ry="3" fill="%23FF1493" opacity="0.05"/><path d="M 85 115 Q 100 125 115 115" stroke="%23FF1493" stroke-width="2" fill="none" opacity="0.05"/></svg>') no-repeat center;
+    background-size: contain;
+    pointer-events: none;
+    z-index: 0;
+    animation: kawaii-float-slow 10s ease-in-out infinite;
+  }
 }
+
+// 📱 Responsive design
+@media (max-width: 768px) {
+  .chatting-page-container {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    min-width: unset;
+    height: 250px;
+    border-right: none;
+    border-bottom: 4px solid var(--kitty-pink);
+    
+    &::before {
+      top: auto;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--kitty-gradient);
+    }
+    
+    &::after {
+      right: 20px;
+      bottom: -20px;
+      top: auto;
+    }
+  }
+  
+  .chat {
+    flex: 1;
+    height: calc(100vh - 250px);
+  }
+}
+
+
 

@@ -26,7 +26,10 @@ export class DmService {
     }
     await this.friendService.removeFriend(username, contact);
   }
-  public async createDm(username: string, friendname: string): Promise<void> {
+  public async createDm(
+    username: string,
+    friendname: string,
+  ): Promise<GroupDto | undefined> {
     const newDm: GroupDto = {
       name: ``,
       description: ``,
@@ -40,14 +43,25 @@ export class DmService {
     username: string,
     friendname: string,
   ): Promise<GroupDto | null> {
-    const user = await this.userModel.findOne({ username: username });
+    const user = await this.userModel
+      .findOne({ username: username })
+      .populate('chats');
     if (!user) {
       throw new Error('User not found');
     }
-    const friend = await this.userModel.findOne({ username: friendname });
+    const friend = await this.userModel
+      .findOne({ username: friendname })
+      .populate('chats');
     if (!friend) {
       throw new Error('Friend not found');
     }
+
+    const tedt = this.userModel.findOne({
+      chats: { $and: [{ $in: user.chats }, { $in: friend.chats }] },
+    });
+    const temp = this.groupModel.findOne({
+      isDm: true,
+    });
     const commonGroupIds = user.chats.filter((groupId) =>
       friend.chats.includes(groupId),
     );

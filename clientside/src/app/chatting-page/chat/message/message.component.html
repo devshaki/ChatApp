@@ -1,4 +1,4 @@
-<mat-card class="example-card" appearance="outlined">
+<mat-card class="example-card" [ngClass]="{'flying-message': isNewMessage}" appearance="outlined">
   <mat-card-header>
     <div mat-card-avatar class="example-header-image"></div>
     <mat-card-title>{{ message.senderId }}</mat-card-title>

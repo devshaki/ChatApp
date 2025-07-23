@@ -58,10 +58,17 @@ export class GroupService {
   }
 
   public async getGroupsByUser(username: string): Promise<GroupDto[]> {
-    const user = await this.userModel.findOne({ username: username });
+    const user = await this.userModel
+      .findOne({ username: username })
+      .populate('chats');
+
     if (!user) {
       return [];
     }
+    console.log(user.populated('chats'));
+    console.log(user.chats);
+
+    // const crdh = user.chats.filter((chat) => chat.isDm === false);
     const groupIds = user.chats;
     const groups = await this.groupModel.find({
       _id: { $in: groupIds },

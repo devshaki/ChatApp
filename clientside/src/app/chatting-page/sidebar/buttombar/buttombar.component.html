@@ -1,16 +1,29 @@
-<app-addContact
-  *ngIf="selectedToggle === 'AddContact'"
-  class="centered"
-></app-addContact>
+<div class="bottom-bar-container">
+  <app-addContact
+    *ngIf="selectedToggle === 'AddContact'"
+    class="centered"
+  ></app-addContact>
 
-<mat-button-toggle-group
-  name="buttombar"
-  aria-label="Font Style"
-  [(value)]="selectedToggle"
-  (change)="onToggleChange($event.value)"
->
-  <mat-button-toggle value="Groups">Groups</mat-button-toggle>
-  <mat-button-toggle value="Dms">Dms</mat-button-toggle>
-  <mat-button-toggle value="AddContact">Add Contact</mat-button-toggle>
-  <button mat-button (click)="onNewGroupClick()">New Group</button>
-</mat-button-toggle-group>
+  <div class="button-group-container">
+    <mat-button-toggle-group
+      name="buttombar"
+      aria-label="Font Style"
+      [(value)]="selectedToggle"
+      (change)="onToggleChange($event.value)"
+      class="toggle-group"
+    >
+      <mat-button-toggle value="Groups">Groups</mat-button-toggle>
+      <mat-button-toggle value="Dms">Dms</mat-button-toggle>
+      <mat-button-toggle value="AddContact">Add Contact</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <div class="action-buttons">
+      <button mat-button (click)="onNewGroupClick()" class="action-btn">
+        <mat-icon>group_add</mat-icon>
+      </button>
+      <button mat-button (click)="onLogOut()" class="action-btn">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

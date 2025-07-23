@@ -1,0 +1,349 @@
+// 🎀 Hello Kitty Group Editor 🎀
+.group-editor-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--kitty-white);
+  border-radius: 30px;
+  border: 4px solid var(--kitty-pink);
+  box-shadow: var(--kitty-shadow);
+  position: relative;
+  
+  // 🌸 Container decoration
+  &::before {
+    content: '🎀';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 3rem;
+    background: var(--kitty-white);
+    border-radius: 50%;
+    padding: 10px;
+    border: 4px solid var(--kitty-pink);
+  }
+}
+
+:host {
+  display: block;
+  padding: 2rem;
+  background: var(--kitty-light-pink);
+  background-image: 
+    radial-gradient(circle at 30% 30%, rgba(255, 105, 180, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+  min-height: 100vh;
+  position: relative;
+  
+  // 🌸 Floating decorations
+  &::before {
+    content: '👥✨💕🌸';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 2rem;
+    opacity: 0.3;
+    animation: kawaii-wiggle 3s ease-in-out infinite;
+    letter-spacing: 1rem;
+  }
+}
+
+h1 {
+  font-family: 'Comfortaa', cursive;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--kitty-hot-pink);
+  background: var(--kitty-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+  
+  &::before {
+    content: '👑';
+    margin-right: 1rem;
+    font-size: 2rem;
+    background: none;
+    -webkit-text-fill-color: initial;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: var(--kitty-gradient);
+    border-radius: 2px;
+  }
+}
+
+// 💖 Add Member Section
+.add-member-section {
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: var(--kitty-cream);
+  border-radius: 25px;
+  border: 3px solid var(--kitty-pink);
+  position: relative;
+  
+  &::before {
+    content: '✨';
+    position: absolute;
+    top: -15px;
+    left: 30px;
+    font-size: 2rem;
+    background: var(--kitty-white);
+    border-radius: 50%;
+    padding: 5px;
+    border: 3px solid var(--kitty-pink);
+  }
+}
+
+// 🌸 Members Section
+.members-section {
+  h2 {
+    margin-bottom: 2rem;
+    text-align: center;
+    padding: 1rem;
+    background: var(--kitty-light-pink);
+    border-radius: 20px;
+    border: 3px solid var(--kitty-pink);
+  }
+}
+
+.members-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.member-item {
+  animation: kawaii-fade-in 0.6s ease-out;
+  
+  &:nth-child(even) {
+    animation-delay: 0.1s;
+  }
+  
+  &:nth-child(odd) {
+    animation-delay: 0.2s;
+  }
+}
+
+// 💕 Empty State
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  background: var(--kitty-light-pink);
+  border-radius: 25px;
+  border: 3px dashed var(--kitty-pink);
+  margin-top: 2rem;
+  
+  .empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: kawaii-float-slow 3s ease-in-out infinite;
+  }
+  
+  h3 {
+    font-family: 'Comfortaa', cursive;
+    font-size: 1.5rem;
+    color: var(--kitty-hot-pink);
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    font-family: 'Nunito', cursive;
+    font-size: 1.1rem;
+    color: var(--kitty-dark);
+    opacity: 0.8;
+  }
+}
+
+h2 {
+  font-family: 'Comfortaa', cursive;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--kitty-hot-pink);
+  margin-bottom: 1.5rem;
+  text-transform: capitalize;
+  
+  &::before {
+    content: '✨';
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+  }
+}
+
+// 💕 Add Member Form
+.mat-mdc-form-field {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 2rem;
+  
+  .mdc-text-field {
+    background: var(--kitty-white);
+    border: 3px solid var(--kitty-pink);
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      border-color: var(--kitty-hot-pink);
+      background: var(--kitty-light-pink);
+      transform: scale(1.02);
+      box-shadow: 0 5px 20px rgba(255, 105, 180, 0.2);
+    }
+    
+    &.mdc-text-field--focused {
+      border-color: var(--kitty-red);
+      background: var(--kitty-white);
+      box-shadow: var(--kitty-glow);
+      transform: scale(1.02);
+    }
+  }
+  
+  .mdc-text-field__input {
+    color: var(--kitty-dark);
+    font-family: 'Nunito', cursive;
+    font-weight: 600;
+    font-size: 1.1rem;
+    caret-color: var(--kitty-hot-pink);
+  }
+  
+  .mdc-floating-label {
+    color: var(--kitty-hot-pink);
+    font-family: 'Comfortaa', cursive;
+    font-weight: 600;
+  }
+  
+  .mdc-floating-label--float-above {
+    color: var(--kitty-red);
+    font-weight: 700;
+  }
+  
+  button[matSuffix] {
+    background: var(--kitty-gradient);
+    color: var(--kitty-white);
+    border-radius: 50%;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%);
+      transform: scale(1.1);
+      box-shadow: var(--kitty-glow);
+    }
+  }
+}
+
+// 🎀 Autocomplete Styling
+.mat-mdc-autocomplete-panel {
+  background: var(--kitty-white);
+  border: 3px solid var(--kitty-pink);
+  border-radius: 20px;
+  box-shadow: var(--kitty-shadow);
+  
+  .mat-mdc-option {
+    font-family: 'Nunito', cursive;
+    font-weight: 600;
+    color: var(--kitty-dark);
+    padding: 1rem 1.5rem;
+    
+    &:hover {
+      background: var(--kitty-light-pink);
+      color: var(--kitty-hot-pink);
+    }
+    
+    &.mdc-list-item--selected {
+      background: var(--kitty-gradient);
+      color: var(--kitty-white);
+    }
+  }
+}
+
+// 💖 Members List
+.mat-mdc-list {
+  background: transparent;
+  padding: 0;
+  
+  app-member {
+    display: block;
+    margin-bottom: 1rem;
+    background: var(--kitty-white);
+    border: 3px solid var(--kitty-pink);
+    border-radius: 20px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    box-shadow: var(--kitty-shadow);
+    
+    &:hover {
+      background: var(--kitty-light-pink);
+      border-color: var(--kitty-hot-pink);
+      transform: translateX(10px) scale(1.02);
+      box-shadow: var(--kitty-glow);
+    }
+    
+    // 👤 Member decoration
+    &::before {
+      content: '👤';
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      opacity: 0.6;
+    }
+    
+    // ✨ Sparkle decoration
+    &::after {
+      content: '✨';
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      font-size: 1rem;
+      opacity: 0.4;
+      animation: kawaii-wiggle 2s ease-in-out infinite;
+    }
+  }
+}
+
+// 🌸 Dividers
+.mat-divider {
+  border-color: var(--kitty-pink);
+  border-width: 2px;
+  opacity: 0.4;
+  margin: 1.5rem 0;
+  position: relative;
+  border-radius: 2px;
+  
+  &::after {
+    content: '🎀';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--kitty-light-pink);
+    padding: 0 1rem;
+    font-size: 1rem;
+    animation: kawaii-wiggle 3s ease-in-out infinite;
+  }
+}
+
+// 📱 Responsive Design
+@media (max-width: 768px) {
+  :host {
+    padding: 1rem;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  .mat-mdc-form-field {
+    max-width: 100%;
+  }
+}

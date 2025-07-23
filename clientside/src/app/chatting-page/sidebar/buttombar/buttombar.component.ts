@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-buttombar',
@@ -11,7 +12,10 @@ export class ButtombarComponent implements OnInit {
 
   @Output() toggleSelected = new EventEmitter<string>();
 
-  constructor(private readonly router: Router) {}
+  constructor(
+    private readonly router: Router,
+    private readonly cookiesService: CookieService
+  ) {}
 
   public ngOnInit(): void {}
 
@@ -22,5 +26,10 @@ export class ButtombarComponent implements OnInit {
 
   public onNewGroupClick() {
     this.router.navigate(['/new-group']);
+  }
+
+  public onLogOut() {
+    this.cookiesService.delete('username', '/');
+    this.router.navigate(['/login']);
   }
 }

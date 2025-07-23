@@ -1,4 +1,12 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { GroupDto } from '../../dto/group.dto';
 import { MessageDto } from 'src/app/dto/message.dto';
 import { ApiService } from 'src/app/api.service';
@@ -14,10 +22,8 @@ import { MessageService } from 'src/app/services/message.service';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
-export class ChatComponent implements OnInit, OnDestroy {
-  // @Input() set SelectedGroup(group: GroupDto | null) {
-  //   this.selectedGroup = group;
-  // }
+export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('scroll') private chatMessages!: ElementRef;
 
   selectedGroup: GroupDto | null = null;
   messages: MessageDto[] = [];
@@ -45,7 +51,16 @@ export class ChatComponent implements OnInit, OnDestroy {
     });
 
     this.chatState.messages$.subscribe((messages) => {
+      const previousCount = this.messages.length;
       this.messages = messages;
+      
+      // If we have new messages (array got longer), scroll to bottom after animation
+      if (messages.length > previousCount) {
+        // Wait 300ms to let the flying animation be visible, then scroll
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 300);
+      }
     });
 
     this.route.paramMap.subscribe((params) => {
@@ -56,6 +71,25 @@ export class ChatComponent implements OnInit, OnDestroy {
     });
   }
 
+  public ngAfterViewInit(): void {
+    // Scroll to bottom after view is initialized
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 100);
+  }
+  private scrollToBottom(): void {
+    try {
+      // Smooth scroll to bottom to follow the flying message
+      this.chatMessages.nativeElement.scrollTo({
+        top: this.chatMessages.nativeElement.scrollHeight,
+        behavior: 'smooth'
+      });
+    } catch (err) {
+      // Fallback for browsers that don't support smooth scroll
+      this.chatMessages.nativeElement.scrollTop =
+        this.chatMessages.nativeElement.scrollHeight;
+    }
+  }
   public sendMessage() {
     this.selectedGroup$.pipe(take(1)).subscribe((group) => {
       if (group) {
@@ -64,16 +98,21 @@ export class ChatComponent implements OnInit, OnDestroy {
           body: this.messageInput,
         };
         this.messageService.sendMessage(message);
+        // Clear input immediately for better UX
         this.messageInput = '';
+        // Wait a bit for the message to be added, then scroll
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 100);
       }
     });
   }
 
   public onEditGroup(group: GroupDto | null): void {
+    console.log('Editing group:', group);
     if (group) {
-      this.router.navigate(['/group-editor'], {
-        state: { group },
-      });
+      console.log('Editing group:', group);
+      this.router.navigate(['/group-editor' + `/${group.groupId}`]);
     }
   }
   public ngOnDestroy(): void {

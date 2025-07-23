@@ -9,12 +9,16 @@ import { ApiService } from 'src/app/api.service';
   styleUrls: ['./addContact.component.scss'],
 })
 export class AddContactComponent implements OnInit {
-  myControl = new FormControl();
+  inputControl = new FormControl('');
   users: string[] = [];
 
   constructor(private readonly apiService: ApiService) {}
 
   public ngOnInit(): void {
+    this.updateContacts();
+  }
+
+  public updateContacts(): void {
     this.apiService.getUsers().subscribe((users: string[]) => {
       this.users = users;
     });
@@ -23,7 +27,8 @@ export class AddContactComponent implements OnInit {
   public onAddMember(username: string): void {
     this.apiService.addContact(username).subscribe({
       next: () => {
-        this.myControl.setValue('');
+        this.inputControl.setValue('');
+        console.log(`Contact ${username} added successfully.`);
       },
     });
   }

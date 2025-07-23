@@ -1,26 +1,28 @@
 <div>
   <mat-card>
     <mat-card-header>
-      <mat-card-title> new group </mat-card-title>
+      <mat-card-title>New Group</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form (ngSubmit)="onSubmit()">
         <mat-form-field appearance="outline">
-          <mat-label>group name</mat-label>
+          <mat-label>💕 Group Name</mat-label>
           <input
             [(ngModel)]="groupName"
             name="groupName"
             id="groupname"
             matInput
+            placeholder="Enter a cute group name! 🌸"
           />
         </mat-form-field>
         <mat-form-field appearance="outline" class="login-field">
-          <mat-label>group description</mat-label>
+          <mat-label>📝 Group Description</mat-label>
           <input
             [(ngModel)]="groupDesc"
             name="groupDesc"
             matInput
             id="groupdesc"
+            placeholder="Describe your kawaii group! 💝"
           />
         </mat-form-field>
         <button
@@ -29,12 +31,12 @@
           class="login-btn"
           type="submit"
         >
-          create
+          Create Group
         </button>
       </form>
     </mat-card-content>
     <div class="switch-link">
-      <a routerLink="/chat">go back</a>
+      <a routerLink="/chat">Go Back</a>
     </div>
   </mat-card>
 </div>

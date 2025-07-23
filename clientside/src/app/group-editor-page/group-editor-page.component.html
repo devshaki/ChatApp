@@ -1,26 +1,42 @@
-<h1>Members</h1>
-<h2>add member</h2>
-<mat-form-field appearance="fill">
-  <mat-label>Add member</mat-label>
-  <input
-    #input
-    type="text"
-    matInput
-    [matAutocomplete]="auto"
-    placeholder="Search contacts"
-  />
-  <button matSuffix mat-icon-button (click)="onAddMember(input.value)">
-    <mat-icon>add</mat-icon>
-  </button>
-</mat-form-field>
-<mat-autocomplete #auto="matAutocomplete">
-  <mat-option *ngFor="let contact of contacts" [value]="contact">
-    {{ contact }}
-  </mat-option>
-</mat-autocomplete>
-<mat-divider></mat-divider>
+<div class="group-editor-container">
+  <h1>👥 Group Members</h1>
+  
+  <div class="add-member-section">
+    <h2>✨ add member</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>🔍 Add kawaii member</mat-label>
+      <input
+        #input
+        type="text"
+        matInput
+        [matAutocomplete]="auto"
+        placeholder="Search for cute friends... 💕"
+      />
+      <button matSuffix mat-icon-button (click)="onAddMember(input.value)">
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let contact of contacts" [value]="contact">
+        🌸 {{ contact }}
+      </mat-option>
+    </mat-autocomplete>
+  </div>
 
-<mat-list role="list" *ngFor="let member of members">
-  <app-member [username]="member" (onKick)="onKickMember(member)"></app-member>
   <mat-divider></mat-divider>
-</mat-list>
+
+  <div class="members-section">
+    <h2 *ngIf="members?.length">💖 Current Members ({{ members.length }})</h2>
+    <div class="members-list">
+      <div *ngFor="let member of members" class="member-item">
+        <app-member [username]="member" (onKick)="onKickMember(member)"></app-member>
+      </div>
+    </div>
+    
+    <div *ngIf="!members?.length" class="empty-state">
+      <div class="empty-icon">👥</div>
+      <h3>No members yet!</h3>
+      <p>Add some kawaii friends to your group! 🎀</p>
+    </div>
+  </div>
+</div>

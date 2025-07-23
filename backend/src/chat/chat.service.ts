@@ -20,8 +20,15 @@ export class ChatService {
     );
 
     await this.emitToChat(messageDto.chatId, 'message', messageDto);
-
     return messageId;
+  }
+
+  public async isPartOfChat(
+    chatId: string,
+    username: string,
+  ): Promise<boolean> {
+    const members = await this.chatDatabaseService.getMembersInGroup(chatId);
+    return members.includes(username);
   }
 
   public async emitToChat(

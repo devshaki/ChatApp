@@ -6,6 +6,7 @@
     matInput
     [matAutocomplete]="auto"
     placeholder="Search contacts"
+    [formControl]="inputControl"
   />
   <button matSuffix mat-icon-button (click)="onAddMember(input.value)">
     <mat-icon>add</mat-icon>

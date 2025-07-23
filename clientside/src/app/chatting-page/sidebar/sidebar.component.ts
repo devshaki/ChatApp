@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
+  search: string = '';
   groups: GroupDto[] = [];
   contacts: string[] = [];
   currentView: string = 'Groups';

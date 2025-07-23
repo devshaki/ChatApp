@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GroupDto } from '../dto/group.dto';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { FormControl } from '@angular/forms';
 import { SocketIoService } from '../socket-io.service';
@@ -20,29 +20,36 @@ export class GroupEditorPageComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly socketIoService: SocketIoService,
-    private readonly apiService: ApiService
+    private readonly apiService: ApiService,
+    private readonly route: ActivatedRoute
   ) {}
 
   public ngOnInit(): void {
-    const navigation = this.router.getCurrentNavigation();
+    // const navigation = this.router.getCurrentNavigation();
 
-    if (navigation?.extras.state?.['group']) {
-      this.group = navigation.extras.state['group'] as GroupDto;
-    } else {
-      const state = history.state;
-      if (state && state.group) {
-        this.group = state.group as GroupDto;
-      } else {
-        return;
+    this.route.paramMap.subscribe((params) => {
+      const chatId = params.get('id');
+      if (chatId) {
+        this.apiService.getGroup(chatId).subscribe((group: GroupDto) => {
+          console.log('group:', group);
+          this.group = group;
+          this.loadMembers();
+        });
       }
-    }
-
-    if (this.group) {
-      this.loadMembers();
-      this.apiService.getUserContacts().subscribe((contacts: string[]) => {
-        this.contacts = contacts;
-      });
-    }
+    });
+    // if (navigation?.extras.state?.['group']) {
+    //   this.group = navigation.extras.state['group'] as GroupDto;
+    // } else {
+    //   const state = history.state;
+    //   if (state && state.group) {
+    //     this.group = state.group as GroupDto;
+    //   } else {
+    //     return;
+    //   }
+    // }
+    this.apiService.getUserContacts().subscribe((contacts: string[]) => {
+      this.contacts = contacts;
+    });
   }
 
   public onKickMember(member: string): void {

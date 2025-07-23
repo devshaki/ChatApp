@@ -49,6 +49,10 @@ const routes: Routes = [
     path: 'group-editor',
     component: GroupEditorPageComponent,
   },
+  {
+    path: 'group-editor/:id',
+    component: GroupEditorPageComponent,
+  },
 ];
 
 @NgModule({

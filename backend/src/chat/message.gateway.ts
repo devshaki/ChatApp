@@ -25,6 +25,9 @@ export class MessageGateway {
       client.emit(Constants.ERROR_EVENT, Constants.UNAUTHORIZED_USER_MESSAGE);
       return Constants.UNAUTHORIZED_USER_MESSAGE;
     }
+    if (!this.chatService.isPartOfChat(payload.chatId, username)) {
+      return 'You are not part of this chat';
+    }
     payload.senderId = username;
     payload.createdAt = new Date(); //fix
 

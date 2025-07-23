@@ -4,12 +4,14 @@ import { Model } from 'mongoose';
 import { UserDto } from 'src/dto/user.dto';
 import { HashingService } from 'src/hashing/hashing.service';
 import { User } from 'src/schemas/user.schema';
+import { FriendService } from './friend.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly hashingService: HashingService,
+    private readonly friendService: FriendService,
   ) {}
 
   public async checkUserLogin(
@@ -45,8 +47,12 @@ export class UserService {
     return !!user;
   }
 
-  public async getUsernames(): Promise<string[]> {
+  public async getUsernames(username: string): Promise<string[]> {
     const users = await this.userModel.find({});
-    return users.map((user) => user.username);
+    const friends = await this.friendService.getFriends(username);
+    return users
+      .filter((user) => user.username !== username)
+      .filter((user) => !friends.includes(user.username))
+      .map((user) => user.username);
   }
 }

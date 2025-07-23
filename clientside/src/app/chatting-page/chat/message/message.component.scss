@@ -1,0 +1,287 @@
+// 🌸 Kawaii Message Card Styling with Flying Animation 🌸
+.example-card {
+  margin: 1.5rem 0;
+  padding: 0;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFF0F5 50%, #FFFFFF 100%);
+  border: 3px solid var(--kitty-pink);
+  border-radius: 25px;
+  box-shadow: 
+    0 8px 25px rgba(255, 182, 193, 0.3),
+    0 4px 15px rgba(255, 105, 180, 0.2),
+    inset 0 2px 0 rgba(255, 255, 255, 0.5);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+  
+  // 🎀 Kawaii decorations (static now)
+  &::after {
+    content: '🌸';
+    position: absolute;
+    top: -8px;
+    right: 15px;
+    font-size: 1.5rem;
+    z-index: 2;
+  }
+  
+  &:hover {
+    transform: translateY(-5px) scale(1.02);
+    border-color: var(--kitty-hot-pink);
+    box-shadow: 
+      0 12px 35px rgba(255, 105, 180, 0.4),
+      0 6px 20px rgba(255, 182, 193, 0.3),
+      inset 0 2px 0 rgba(255, 255, 255, 0.7);
+  }
+  
+  // 🚀 Flying animation only for new messages
+  &.flying-message {
+    animation: message-fly-in 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+}
+
+// 👤 Avatar styling
+.example-header-image {
+  background: var(--kitty-gradient);
+  border: 3px solid var(--kitty-white);
+  box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+  position: relative;
+  
+  &::before {
+    content: '👤';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    color: var(--kitty-white);
+  }
+}
+
+// 📝 Header styling
+mat-card-header {
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+  position: relative;
+  z-index: 2;
+  
+  .mat-mdc-card-title {
+    color: var(--kitty-red);
+    font-family: 'Comfortaa', cursive;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(255, 105, 180, 0.2);
+    
+    &::before {
+      content: '💕 ';
+      font-size: 1rem;
+    }
+  }
+}
+
+// 💬 Content styling
+mat-card-content {
+  padding: 0 1.5rem 1rem 1.5rem;
+  position: relative;
+  z-index: 2;
+  
+  p {
+    margin: 0;
+    font-family: 'Nunito', cursive;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.6;
+    color: var(--kitty-dark);
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, 
+      rgba(255, 240, 245, 0.8) 0%, 
+      rgba(255, 228, 230, 0.8) 100%);
+    border-radius: 18px;
+    border: 2px solid rgba(255, 182, 193, 0.3);
+    position: relative;
+    
+    // 🌟 Message bubble decoration
+    &::before {
+      content: '✨';
+      position: absolute;
+      top: -8px;
+      left: 15px;
+      font-size: 1rem;
+      background: var(--kitty-white);
+      border-radius: 50%;
+      padding: 2px;
+      animation: kawaii-twinkle 3s ease-in-out infinite;
+    }
+  }
+}
+
+// 📅 Footer styling
+mat-card-footer {
+  padding: 0.5rem 1.5rem 1.5rem 1.5rem;
+  position: relative;
+  z-index: 2;
+  
+  .example-footer-text {
+    font-family: 'Comfortaa', cursive;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--kitty-hot-pink);
+    opacity: 0.8;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    &::before {
+      content: '🕐';
+      font-size: 0.8rem;
+    }
+  }
+}
+
+// 🎭 Kawaii animations
+@keyframes kawaii-sparkle {
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes kawaii-wiggle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes kawaii-twinkle {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+    opacity: 0.7;
+  }
+}
+
+// 📱 Responsive design
+@media (max-width: 768px) {
+  .example-card {
+    margin: 1rem 0;
+    border-radius: 20px;
+  }
+  
+  mat-card-header {
+    padding: 1rem 1rem 0.5rem 1rem;
+    
+    .mat-mdc-card-title {
+      font-size: 1.1rem;
+    }
+  }
+  
+  mat-card-content {
+    padding: 0 1rem 0.5rem 1rem;
+    
+    p {
+      padding: 0.8rem 1.2rem;
+      font-size: 1rem;
+    }
+  }
+  
+  mat-card-footer {
+    padding: 0.3rem 1rem 1rem 1rem;
+    
+    .example-footer-text {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+// 🚀 Flying Message Animation - Thrown from Top-Left
+@keyframes message-fly-in {
+  0% {
+    // Start from top-left corner of screen
+    transform: translate(-100vw, -100vh) rotate(-45deg) scale(0.3);
+    opacity: 0;
+    z-index: 1000;
+  }
+  
+  20% {
+    // Flying through the air with rotation
+    transform: translate(-60vw, -40vh) rotate(180deg) scale(0.5);
+    opacity: 0.7;
+    z-index: 1000;
+  }
+  
+  40% {
+    // Continue flying with flip
+    transform: translate(-30vw, -10vh) rotate(360deg) scale(0.7);
+    opacity: 0.9;
+    z-index: 1000;
+  }
+  
+  60% {
+    // Getting closer to final position
+    transform: translate(-10vw, 5vh) rotate(540deg) scale(0.9);
+    opacity: 0.95;
+    z-index: 1000;
+  }
+  
+  80% {
+    // Almost at final position with final flip
+    transform: translate(-2vw, 2vh) rotate(700deg) scale(1.05);
+    opacity: 1;
+    z-index: 1000;
+  }
+  
+  90% {
+    // Slight overshoot and settle
+    transform: translate(0, 0) rotate(720deg) scale(1.1);
+    opacity: 1;
+    z-index: 1000;
+  }
+  
+  100% {
+    // Final resting position
+    transform: translate(0, 0) rotate(720deg) scale(1);
+    opacity: 1;
+    z-index: auto;
+  }
+}
+
+// 🌟 Alternative faster version for rapid messages
+@keyframes message-fly-in-fast {
+  0% {
+    transform: translate(-80vw, -80vh) rotate(-30deg) scale(0.4);
+    opacity: 0;
+    z-index: 1000;
+  }
+  
+  30% {
+    transform: translate(-40vw, -20vh) rotate(180deg) scale(0.7);
+    opacity: 0.8;
+    z-index: 1000;
+  }
+  
+  70% {
+    transform: translate(-5vw, 2vh) rotate(350deg) scale(1.05);
+    opacity: 1;
+    z-index: 1000;
+  }
+  
+  100% {
+    transform: translate(0, 0) rotate(360deg) scale(1);
+    opacity: 1;
+    z-index: auto;
+  }
+}

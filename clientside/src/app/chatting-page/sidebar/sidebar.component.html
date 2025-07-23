@@ -1,8 +1,15 @@
 <div class="sidebar-content">
   <div *ngIf="currentView === 'Groups'">
+    <input
+      type="text"
+      placeholder="Search groups"
+      matInput
+      [(ngModel)]="search"
+    />
     <div *ngFor="let group of groups" class="group-item">
       <div class="group-name">
         <app-group
+          *ngIf="group.name.toLowerCase().includes(search.toLowerCase())"
           [group]="group"
           (onOpenGroup)="selectGroup(group)"
         ></app-group>
@@ -12,8 +19,15 @@
   </div>
 
   <div *ngIf="currentView === 'Dms'">
+    <input
+      type="text"
+      placeholder="Search contacts"
+      matInput
+      [(ngModel)]="search"
+    />
     <div *ngFor="let contact of contacts" class="contact-item">
       <app-dm
+        *ngIf="contact.toLowerCase().includes(search.toLowerCase())"
         [contactName]="contact"
         (onOpenDm)="selectContact(contact)"
         (onDeleteDm)="deleteDm(contact)"
